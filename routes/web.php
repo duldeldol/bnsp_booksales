@@ -1,0 +1,61 @@
+<?php
+
+use App\Http\Controllers\Admin\BookController;
+use App\Http\Controllers\Admin\CategoryController;
+use App\Http\Controllers\Admin\ContactController;
+use App\Http\Controllers\Admin\DashboardController;
+use App\Http\Controllers\Admin\OrderController;
+use App\Http\Controllers\Admin\UserController;
+use App\Http\Controllers\Auth\AuthController;
+use Illuminate\Support\Facades\Route;
+
+/*
+|--------------------------------------------------------------------------
+| Web Routes - BookStore Application
+|--------------------------------------------------------------------------
+*/
+
+// Beranda Utama
+Route::get('/', function () {
+    if (auth()->check()) {
+        return auth()->user()->role === 'admin'
+            ? redirect()->route('admin.dashboard')
+            : redirect()->route('admin.books.index');
+    }
+    return redirect()->route('login');
+})->name('home');
+
+// Autentikasi Pengguna & Admin
+Route::middleware('guest')->group(function () {
+    Route::get('/login', [AuthController::class, 'showLoginForm'])->name('login');
+    Route::post('/login', [AuthController::class, 'login'])->name('login.post');
+    Route::get('/register', [AuthController::class, 'showRegisterForm'])->name('register');
+    Route::post('/register', [AuthController::class, 'register'])->name('register.post');
+});
+
+Route::post('/logout', [AuthController::class, 'logout'])->name('logout')->middleware('auth');
+
+// Panel Administrasi (Khusus Role: Admin)
+Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(function () {
+    // 1. Dashboard Ringkasan
+    Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+
+    // 2. Kelola Kategori Buku (CRUD)
+    Route::resource('categories', CategoryController::class)->except(['show', 'create', 'edit']);
+
+    // 3. Kelola Data Buku (CRUD & Upload Cover)
+    Route::resource('books', BookController::class);
+
+    // 4. List User Terdaftar
+    Route::get('/users', [UserController::class, 'index'])->name('users.index');
+
+    // 5. List Pesanan Buku Pelanggan
+    Route::get('/orders', [OrderController::class, 'index'])->name('orders.index');
+    Route::get('/orders/{id}', [OrderController::class, 'show'])->name('orders.show');
+    Route::patch('/orders/{id}/status', [OrderController::class, 'updateStatus'])->name('orders.status');
+
+    // 6. Kotak Masuk Pesan Pelanggan (Contact Us)
+    Route::get('/contacts', [ContactController::class, 'index'])->name('contacts.index');
+    Route::patch('/contacts/{id}/toggle', [ContactController::class, 'toggleRead'])->name('contacts.toggle');
+    Route::delete('/contacts/{id}', [ContactController::class, 'destroy'])->name('contacts.destroy');
+});

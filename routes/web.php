@@ -7,6 +7,7 @@ use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\OrderController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Auth\AuthController;
+use App\Http\Controllers\HomeController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -15,15 +16,12 @@ use Illuminate\Support\Facades\Route;
 |--------------------------------------------------------------------------
 */
 
-// Beranda Utama
-Route::get('/', function () {
-    if (auth()->check()) {
-        return auth()->user()->role === 'admin'
-            ? redirect()->route('admin.dashboard')
-            : redirect()->route('admin.books.index');
-    }
-    return redirect()->route('login');
-})->name('home');
+// Halaman Publik Toko Buku (Storefront)
+Route::get('/', [HomeController::class, 'index'])->name('home');
+Route::get('/katalog', [HomeController::class, 'catalog'])->name('catalog');
+Route::get('/about', [HomeController::class, 'about'])->name('about');
+Route::get('/contact', [HomeController::class, 'contact'])->name('contact');
+Route::post('/contact', [HomeController::class, 'storeContact'])->name('contact.store');
 
 // Autentikasi Pengguna & Admin
 Route::middleware('guest')->group(function () {
@@ -57,5 +55,6 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
     // 6. Kotak Masuk Pesan Pelanggan (Contact Us)
     Route::get('/contacts', [ContactController::class, 'index'])->name('contacts.index');
     Route::patch('/contacts/{id}/toggle', [ContactController::class, 'toggleRead'])->name('contacts.toggle');
+    Route::patch('/contacts/{id}/read', [ContactController::class, 'markAsRead'])->name('contacts.read');
     Route::delete('/contacts/{id}', [ContactController::class, 'destroy'])->name('contacts.destroy');
 });

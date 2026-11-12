@@ -14,8 +14,6 @@ class UserController extends Controller
 
         if ($request->filled('role')) {
             $query->where('role', $request->role);
-        } else {
-            // Default tampilkan seluruh customer (dan opsional admin)
         }
 
         if ($request->filled('search')) {

@@ -12,9 +12,6 @@
                     <h6 class="font-serif-book fw-bold mb-0 text-dark">Edit Data Buku</h6>
                     <small class="text-muted">Perbarui rincian informasi buku katalog.</small>
                 </div>
-                <a href="{{ route('admin.books.index') }}" class="btn btn-shadcn-outline btn-sm">
-                    <i class="bi bi-arrow-left me-1"></i> Kembali
-                </a>
             </div>
 
             <div class="shadcn-card-body">

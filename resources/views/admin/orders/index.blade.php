@@ -53,22 +53,22 @@
         <table class="shadcn-table">
             <thead>
                 <tr>
-                    <th style="width: 50px;">No</th>
-                    <th>No. Invoice</th>
+                    <th class="text-center" style="width: 50px;">No</th>
+                    <th class="text-center">No. Invoice</th>
                     <th>Nama Pelanggan</th>
-                    <th>Buku Dipesan</th>
-                    <th>Total Bayar</th>
-                    <th>Metode Pembayaran</th>
-                    <th>Status</th>
-                    <th>Tanggal</th>
-                    <th style="width: 90px;" class="text-end">Aksi</th>
+                    <th class="text-center">Buku Dipesan</th>
+                    <th class="text-center">Total Bayar</th>
+                    <th class="text-center">Metode Pembayaran</th>
+                    <th class="text-center">Status</th>
+                    <th class="text-center">Tanggal</th>
+                    <th class="text-center" style="width: 90px;">Aksi</th>
                 </tr>
             </thead>
             <tbody>
                 @forelse($orders as $index => $order)
                     <tr>
-                        <td class="text-muted">{{ $orders->firstItem() + $index }}</td>
-                        <td class="font-monospace fw-semibold text-dark">
+                        <td class="text-center text-muted">{{ $orders->firstItem() + $index }}</td>
+                        <td class="text-center font-monospace fw-semibold text-dark text-nowrap">
                             <a href="{{ route('admin.orders.show', $order->id) }}" class="text-decoration-none text-dark fw-bold" title="Lihat detail pesanan">
                                 {{ $order->order_number }}
                             </a>
@@ -77,26 +77,26 @@
                             <div class="fw-semibold text-dark">{{ $order->customer_name }}</div>
                             <small class="text-muted">{{ $order->customer_phone }}</small>
                         </td>
-                        <td>
-                            <span class="badge bg-light text-secondary border fw-normal">
+                        <td class="text-center text-nowrap">
+                            <span class="badge-editorial badge-editorial-stone">
                                 {{ $order->items->sum('quantity') }} buku ({{ $order->items->count() }} judul)
                             </span>
                         </td>
-                        <td class="fw-semibold text-dark">{{ $order->formatted_total }}</td>
-                        <td>
-                            <span class="badge bg-light text-secondary border fw-normal" style="font-size: 0.72rem;">
+                        <td class="text-center fw-semibold text-dark text-nowrap">{{ $order->formatted_total }}</td>
+                        <td class="text-center text-nowrap">
+                            <span class="badge-editorial badge-editorial-stone">
                                 {{ $order->payment_method_label }}
                             </span>
                         </td>
-                        <td>
-                            <span class="badge bg-{{ $order->status_badge }} rounded-pill px-2.5 py-1" style="font-size: 0.72rem;">
+                        <td class="text-center text-nowrap">
+                            <span class="badge-editorial badge-{{ $order->status_badge }}">
                                 {{ $order->status_label }}
                             </span>
                         </td>
-                        <td class="text-muted small">
+                        <td class="text-center text-muted small text-nowrap">
                             {{ $order->created_at->format('d M Y, H:i') }}
                         </td>
-                        <td class="text-end">
+                        <td class="text-center text-nowrap">
                             <a href="{{ route('admin.orders.show', $order->id) }}" class="btn btn-sm btn-shadcn-outline py-1 px-2.5" style="font-size: 0.75rem;">
                                 Detail
                             </a>
@@ -117,7 +117,7 @@
 
     @if($orders->hasPages())
         <div class="p-3 border-top">
-            {{ $orders->links('pagination::bootstrap-5') }}
+            {{ $orders->links('admin.pagination') }}
         </div>
     @endif
 </div>

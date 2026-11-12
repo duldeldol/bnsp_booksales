@@ -19,7 +19,7 @@
                     <h6 class="font-serif-book fw-bold mb-0 text-dark">Rincian Buku yang Dipesan</h6>
                     <small class="text-muted font-monospace">Invoice: {{ $order->order_number }}</small>
                 </div>
-                <span class="badge bg-{{ $order->status_badge }} rounded-pill px-3 py-1.5" style="font-size: 0.75rem;">
+                <span class="badge-editorial badge-{{ $order->status_badge }} px-3 py-1.5" style="font-size: 0.75rem;">
                     {{ $order->status_label }}
                 </span>
             </div>
@@ -118,7 +118,7 @@
 
             <div class="mb-3">
                 <span class="text-muted small d-block">Metode Pembayaran:</span>
-                <span class="badge bg-light text-secondary border fw-normal">{{ $order->payment_method_label }}</span>
+                <span class="badge-editorial badge-editorial-stone">{{ $order->payment_method_label }}</span>
             </div>
 
             <div class="pt-2 border-top text-muted small" style="font-size: 0.72rem;">

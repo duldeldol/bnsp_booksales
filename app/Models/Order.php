@@ -38,11 +38,11 @@ class Order extends Model
     public function getStatusBadgeAttribute(): string
     {
         return match ($this->status) {
-            'pending' => 'warning-subtle text-warning-emphasis border border-warning-subtle',
-            'paid' => 'primary-subtle text-primary border border-primary-subtle',
-            'completed' => 'success-subtle text-success border border-success-subtle',
-            'cancelled' => 'danger-subtle text-danger border border-danger-subtle',
-            default => 'light text-secondary border',
+            'pending' => 'editorial-amber',
+            'paid' => 'editorial-slate',
+            'completed' => 'editorial-emerald',
+            'cancelled' => 'editorial-rose',
+            default => 'editorial-stone',
         };
     }
 

@@ -19,11 +19,11 @@ class OrderController extends Controller
 
             $noSpaceSearch = str_replace(' ', '', $cleanSearch);
 
-            $dashNormalized = preg_replace('/\s*-\s*/', '-', $cleanSearch);
+            $dashNormalized = (string) preg_replace('/\s*-\s*/', '-', $cleanSearch);
 
-            $dashFromSpace = preg_replace('/\s+/', '-', $cleanSearch);
+            $dashFromSpace = (string) preg_replace('/\s+/', '-', $cleanSearch);
 
-            $alphaOnly = preg_replace('/[^A-Za-z0-9]/', '', $cleanSearch);
+            $alphaOnly = (string) preg_replace('/[^A-Za-z0-9]/', '', $cleanSearch);
 
             $query->where(function ($q) use ($rawSearch, $cleanSearch, $noSpaceSearch, $dashNormalized, $dashFromSpace, $alphaOnly) {
                 $q->where('order_number', 'like', "%{$rawSearch}%")

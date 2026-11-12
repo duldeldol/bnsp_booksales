@@ -54,58 +54,60 @@
         <table class="shadcn-table">
             <thead>
                 <tr>
-                    <th style="width: 50px;">No</th>
+                    <th class="text-center" style="width: 50px;">No</th>
                     <th>Nama Kategori</th>
                     <th>Deskripsi</th>
-                    <th>Total Koleksi Buku</th>
-                    <th style="width: 120px;" class="text-end">Aksi</th>
+                    <th class="text-center">Total Koleksi Buku</th>
+                    <th class="text-center" style="width: 100px;">Aksi</th>
                 </tr>
             </thead>
             <tbody>
                 @forelse($categories as $index => $cat)
                     <tr>
-                        <td class="text-muted">{{ $categories->firstItem() + $index }}</td>
+                        <td class="text-center text-muted">{{ $categories->firstItem() + $index }}</td>
                         <td class="fw-semibold text-dark">{{ $cat->name }}</td>
                         <td class="text-muted small">{{ $cat->description ?: '-' }}</td>
-                        <td>
-                            <span class="badge bg-light text-secondary border fw-normal">
+                        <td class="text-center text-nowrap">
+                            <span class="badge-editorial badge-editorial-stone">
                                 {{ $cat->books_count }} Judul Buku
                             </span>
                         </td>
-                        <td class="text-end">
-                            <button type="button" class="btn btn-sm btn-light border py-1 px-2 me-1"
-                                data-bs-toggle="modal"
-                                data-bs-target="#modalEditCategory{{ $cat->id }}" title="Edit">
-                                <i class="bi bi-pencil"></i>
-                            </button>
-                            <button type="button" class="btn btn-sm btn-light border text-danger py-1 px-2"
-                                data-bs-toggle="modal"
-                                data-bs-target="#modalDeleteCategory{{ $cat->id }}" title="Hapus">
-                                <i class="bi bi-trash"></i>
-                            </button>
+                        <td class="text-center text-nowrap" style="width: 100px;">
+                            <div class="d-inline-flex align-items-center gap-1 justify-content-center">
+                                <button type="button" class="btn btn-sm btn-light border py-1 px-2"
+                                    data-bs-toggle="modal"
+                                    data-bs-target="#modalEditCategory{{ $cat->id }}" title="Edit">
+                                    <i class="bi bi-pencil"></i>
+                                </button>
+                                <button type="button" class="btn btn-sm btn-light border text-danger py-1 px-2"
+                                    data-bs-toggle="modal"
+                                    data-bs-target="#modalDeleteCategory{{ $cat->id }}" title="Hapus">
+                                    <i class="bi bi-trash"></i>
+                                </button>
+                            </div>
 
                             <!-- Modal Edit -->
                             <div class="modal fade text-start" id="modalEditCategory{{ $cat->id }}" tabindex="-1">
                                 <div class="modal-dialog modal-dialog-centered">
-                                    <div class="modal-content border-0 shadow" style="border-radius: 12px;">
+                                    <div class="modal-content">
                                         <form action="{{ route('admin.categories.update', $cat->id) }}" method="POST">
                                             @csrf
                                             @method('PUT')
-                                            <div class="modal-header border-0 pb-0">
-                                                <h6 class="modal-title fw-bold text-dark">Edit Kategori</h6>
+                                            <div class="modal-header">
+                                                <h6 class="modal-title">Edit Kategori</h6>
                                                 <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                                             </div>
-                                            <div class="modal-body py-3">
+                                            <div class="modal-body">
                                                 <div class="mb-3">
                                                     <label class="form-label small fw-semibold">Nama Kategori <span class="text-danger">*</span></label>
                                                     <input type="text" name="name" class="form-control" value="{{ $cat->name }}" required>
                                                 </div>
-                                                <div class="mb-2">
+                                                <div class="mb-0">
                                                     <label class="form-label small fw-semibold">Deskripsi</label>
                                                     <textarea name="description" rows="3" class="form-control">{{ $cat->description }}</textarea>
                                                 </div>
                                             </div>
-                                            <div class="modal-footer border-0 pt-0">
+                                            <div class="modal-footer">
                                                 <button type="button" class="btn btn-sm btn-shadcn-outline" data-bs-dismiss="modal">Batal</button>
                                                 <button type="submit" class="btn btn-sm btn-shadcn-primary">Simpan Perubahan</button>
                                             </div>
@@ -117,23 +119,23 @@
                             <!-- Modal Delete Confirmation -->
                             <div class="modal fade text-start" id="modalDeleteCategory{{ $cat->id }}" tabindex="-1">
                                 <div class="modal-dialog modal-dialog-centered">
-                                    <div class="modal-content border-0 shadow" style="border-radius: 12px;">
+                                    <div class="modal-content">
                                         <form action="{{ route('admin.categories.destroy', $cat->id) }}" method="POST">
                                             @csrf
                                             @method('DELETE')
-                                            <div class="modal-header border-0 pb-0">
-                                                <h6 class="modal-title fw-bold text-danger">Hapus Kategori</h6>
+                                            <div class="modal-header">
+                                                <h6 class="modal-title text-danger">Hapus Kategori</h6>
                                                 <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                                             </div>
-                                            <div class="modal-body py-3">
+                                            <div class="modal-body">
                                                 <p class="mb-1 text-secondary small">Apakah Anda yakin ingin menghapus kategori <strong>{{ $cat->name }}</strong>?</p>
                                                 @if($cat->books_count > 0)
-                                                    <div class="alert alert-warning small mt-2 mb-0 py-2">
+                                                    <div class="alert alert-warning small mt-2 mb-0 py-2 border">
                                                         <i class="bi bi-info-circle me-1"></i> Kategori ini memuat {{ $cat->books_count }} buku. Pindahkan atau hapus buku terlebih dahulu.
                                                     </div>
                                                 @endif
                                             </div>
-                                            <div class="modal-footer border-0 pt-0">
+                                            <div class="modal-footer">
                                                 <button type="button" class="btn btn-sm btn-shadcn-outline" data-bs-dismiss="modal">Batal</button>
                                                 <button type="submit" class="btn btn-sm btn-danger rounded-2" {{ $cat->books_count > 0 ? 'disabled' : '' }}>Hapus Kategori</button>
                                             </div>
@@ -159,7 +161,7 @@
 
     @if($categories->hasPages())
         <div class="p-3 border-top">
-            {{ $categories->links('pagination::bootstrap-5') }}
+            {{ $categories->links('admin.pagination') }}
         </div>
     @endif
 </div>
@@ -167,24 +169,24 @@
 <!-- Modal Tambah Kategori -->
 <div class="modal fade" id="modalAddCategory" tabindex="-1">
     <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content border-0 shadow" style="border-radius: 12px;">
+        <div class="modal-content">
             <form action="{{ route('admin.categories.store') }}" method="POST">
                 @csrf
-                <div class="modal-header border-0 pb-0">
-                    <h6 class="modal-title fw-bold text-dark">Tambah Kategori Baru</h6>
+                <div class="modal-header">
+                    <h6 class="modal-title">Tambah Kategori Baru</h6>
                     <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                 </div>
-                <div class="modal-body py-3">
+                <div class="modal-body">
                     <div class="mb-3">
                         <label class="form-label small fw-semibold">Nama Kategori <span class="text-danger">*</span></label>
                         <input type="text" name="name" class="form-control" placeholder="Contoh: Pemrograman Web" required>
                     </div>
-                    <div class="mb-2">
+                    <div class="mb-0">
                         <label class="form-label small fw-semibold">Deskripsi</label>
                         <textarea name="description" rows="3" class="form-control" placeholder="Deskripsi singkat mengenai jenis buku"></textarea>
                     </div>
                 </div>
-                <div class="modal-footer border-0 pt-0">
+                <div class="modal-footer">
                     <button type="button" class="btn btn-sm btn-shadcn-outline" data-bs-dismiss="modal">Batal</button>
                     <button type="submit" class="btn btn-sm btn-shadcn-primary">Simpan Kategori</button>
                 </div>

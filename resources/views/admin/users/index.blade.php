@@ -51,19 +51,19 @@
         <table class="shadcn-table">
             <thead>
                 <tr>
-                    <th style="width: 50px;">No</th>
+                    <th class="text-center" style="width: 50px;">No</th>
                     <th>Pengguna</th>
                     <th>Email & Kontak</th>
                     <th>Alamat Pengiriman</th>
-                    <th>Peran</th>
-                    <th>Total Transaksi</th>
-                    <th>Tanggal Daftar</th>
+                    <th class="text-center">Peran</th>
+                    <th class="text-center">Total Transaksi</th>
+                    <th class="text-center">Tanggal Daftar</th>
                 </tr>
             </thead>
             <tbody>
                 @forelse($users as $index => $u)
                     <tr>
-                        <td class="text-muted">{{ $users->firstItem() + $index }}</td>
+                        <td class="text-center text-muted">{{ $users->firstItem() + $index }}</td>
                         <td>
                             <div class="d-flex align-items-center gap-2">
                                 <div class="fw-semibold text-dark">{{ $u->name }}</div>
@@ -76,23 +76,23 @@
                         <td class="text-muted small" style="max-width: 250px;">
                             {{ $u->address ?: '-' }}
                         </td>
-                        <td>
+                        <td class="text-center text-nowrap">
                             @if($u->role === 'admin')
-                                <span class="badge bg-dark text-white rounded-pill px-2.5 py-1" style="font-size: 0.7rem;">
+                                <span class="badge-editorial badge-editorial-ink">
                                     Administrator
                                 </span>
                             @else
-                                <span class="badge bg-light text-secondary border rounded-pill px-2.5 py-1" style="font-size: 0.7rem;">
+                                <span class="badge-editorial badge-editorial-emerald">
                                     Customer
                                 </span>
                             @endif
                         </td>
-                        <td>
-                            <span class="badge bg-light text-dark border fw-normal">
+                        <td class="text-center text-nowrap">
+                            <span class="badge-editorial badge-editorial-stone">
                                 {{ $u->orders_count }} Pesanan
                             </span>
                         </td>
-                        <td class="text-muted small">
+                        <td class="text-center text-muted small text-nowrap">
                             {{ $u->created_at->format('d M Y') }}
                         </td>
                     </tr>
@@ -111,7 +111,7 @@
 
     @if($users->hasPages())
         <div class="p-3 border-top">
-            {{ $users->links('pagination::bootstrap-5') }}
+            {{ $users->links('admin.pagination') }}
         </div>
     @endif
 </div>

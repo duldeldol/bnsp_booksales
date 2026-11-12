@@ -46,6 +46,25 @@ class ContactController extends Controller
         return back()->with('success', "Pesan dari {$contact->name} ditandai {$statusText}.");
     }
 
+    public function markAsRead(Request $request, $id)
+    {
+        $contact = Contact::findOrFail($id);
+        if (!$contact->is_read) {
+            $contact->update([
+                'is_read' => true,
+            ]);
+        }
+
+        if ($request->wantsJson() || $request->ajax()) {
+            return response()->json([
+                'success' => true,
+                'message' => 'Pesan ditandai sudah dibaca.',
+            ]);
+        }
+
+        return back()->with('success', "Pesan dari {$contact->name} ditandai sudah dibaca.");
+    }
+
     public function destroy($id)
     {
         $contact = Contact::findOrFail($id);

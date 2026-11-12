@@ -10,7 +10,7 @@
     <p class="text-muted small mb-0">Statistik data buku, pelanggan, dan transaksi toko secara real-time.</p>
 </div>
 
-<!-- 5 Clean Stat Cards on Warm Canvas -->
+<!-- 5 Clean Stat Cards -->
 <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-xl-5 g-3 mb-4">
     <div class="col">
         <div class="shadcn-card p-3 h-100 d-flex flex-column justify-content-between">
@@ -51,7 +51,7 @@
             <div>
                 <div class="d-flex align-items-center justify-content-between mb-2">
                     <span class="text-muted small fw-semibold text-uppercase" style="font-size: 0.68rem; letter-spacing: 0.05em;">Total Pesanan</span>
-                    <div class="stat-icon-badge stat-icon-navy">
+                    <div class="stat-icon-badge stat-icon-slate">
                         <i class="bi bi-receipt"></i>
                     </div>
                 </div>
@@ -68,7 +68,7 @@
             <div>
                 <div class="d-flex align-items-center justify-content-between mb-2">
                     <span class="text-muted small fw-semibold text-uppercase" style="font-size: 0.68rem; letter-spacing: 0.05em;">Pelanggan</span>
-                    <div class="stat-icon-badge stat-icon-purple">
+                    <div class="stat-icon-badge stat-icon-stone">
                         <i class="bi bi-people"></i>
                     </div>
                 </div>
@@ -85,7 +85,7 @@
             <div>
                 <div class="d-flex align-items-center justify-content-between mb-2">
                     <span class="text-muted small fw-semibold text-uppercase" style="font-size: 0.68rem; letter-spacing: 0.05em;">Total Pendapatan</span>
-                    <div class="stat-icon-badge stat-icon-rose">
+                    <div class="stat-icon-badge stat-icon-honey">
                         <i class="bi bi-wallet2"></i>
                     </div>
                 </div>
@@ -106,7 +106,7 @@
                     <i class="bi bi-journal-text text-dark"></i>
                     <h6 class="font-serif-book fw-bold mb-0 text-dark" style="font-size: 0.95rem;">Buku Terbaru</h6>
                 </div>
-                <a href="{{ route('admin.books.index') }}" class="small text-decoration-none text-muted">Kelola Buku &rarr;</a>
+                <a href="{{ route('admin.books.index') }}" class="small text-decoration-none text-muted">Kelola Buku</a>
             </div>
 
             @if($recentBooks->isEmpty())
@@ -117,10 +117,10 @@
                         <thead>
                             <tr>
                                 <th>Sampul & Judul Buku</th>
-                                <th>Kategori</th>
-                                <th>Harga</th>
-                                <th>Stok</th>
-                                <th class="text-end">Aksi</th>
+                                <th class="text-center">Kategori</th>
+                                <th class="text-center">Harga</th>
+                                <th class="text-center">Stok</th>
+                                <th class="text-center">Aksi</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -135,20 +135,20 @@
                                             </div>
                                         </div>
                                     </td>
-                                    <td>
-                                        <span class="badge bg-light text-secondary border fw-normal" style="font-size: 0.72rem;">
+                                    <td class="text-center text-nowrap">
+                                        <span class="badge-editorial badge-editorial-stone">
                                             {{ $b->category->name ?? 'Uncategorized' }}
                                         </span>
                                     </td>
-                                    <td class="fw-semibold text-dark">{{ $b->formatted_price }}</td>
-                                    <td>
+                                    <td class="text-center fw-semibold text-dark text-nowrap">{{ $b->formatted_price }}</td>
+                                    <td class="text-center text-nowrap">
                                         @if($b->stock <= 5)
-                                            <span class="badge bg-danger rounded-pill px-2 py-0.5" style="font-size: 0.7rem;">Sisa {{ $b->stock }}</span>
+                                            <span class="badge-editorial badge-editorial-rose">Sisa {{ $b->stock }}</span>
                                         @else
-                                            <span class="badge bg-light text-success border rounded-pill px-2 py-0.5" style="font-size: 0.7rem;">{{ $b->stock }} unit</span>
+                                            <span class="badge-editorial badge-editorial-emerald">{{ $b->stock }} unit</span>
                                         @endif
                                     </td>
-                                    <td class="text-end">
+                                    <td class="text-center text-nowrap">
                                         <a href="{{ route('admin.books.edit', $b->id) }}" class="btn btn-sm btn-shadcn-outline py-1 px-2.5" style="font-size: 0.75rem;">
                                             Edit
                                         </a>
@@ -167,7 +167,7 @@
                     <i class="bi bi-receipt text-dark"></i>
                     <h6 class="font-serif-book fw-bold mb-0 text-dark" style="font-size: 0.95rem;">Pesanan Masuk Terbaru</h6>
                 </div>
-                <a href="{{ route('admin.orders.index') }}" class="small text-decoration-none text-muted">Lihat Semua &rarr;</a>
+                <a href="{{ route('admin.orders.index') }}" class="small text-decoration-none text-muted">Lihat Semua</a>
             </div>
 
             @if($recentOrders->isEmpty())
@@ -177,34 +177,34 @@
                     <table class="shadcn-table">
                         <thead>
                             <tr>
-                                <th>Invoice</th>
+                                <th class="text-center">Invoice</th>
                                 <th>Pelanggan</th>
-                                <th>Total</th>
-                                <th>Metode</th>
-                                <th>Status</th>
-                                <th class="text-end">Aksi</th>
+                                <th class="text-center">Total</th>
+                                <th class="text-center">Metode</th>
+                                <th class="text-center">Status</th>
+                                <th class="text-center">Aksi</th>
                             </tr>
                         </thead>
                         <tbody>
                             @foreach($recentOrders as $order)
                                 <tr>
-                                    <td class="font-monospace fw-semibold text-dark">{{ $order->order_number }}</td>
+                                    <td class="text-center font-monospace fw-semibold text-dark text-nowrap">{{ $order->order_number }}</td>
                                     <td>
                                         <div class="fw-semibold text-dark">{{ $order->customer_name }}</div>
                                         <small class="text-muted">{{ $order->customer_phone }}</small>
                                     </td>
-                                    <td class="fw-semibold text-dark">{{ $order->formatted_total }}</td>
-                                    <td>
-                                        <span class="badge bg-light text-secondary border fw-normal" style="font-size: 0.7rem;">
+                                    <td class="text-center fw-semibold text-dark text-nowrap">{{ $order->formatted_total }}</td>
+                                    <td class="text-center text-nowrap">
+                                        <span class="badge-editorial badge-editorial-stone">
                                             {{ $order->payment_method_label }}
                                         </span>
                                     </td>
-                                    <td>
-                                        <span class="badge bg-{{ $order->status_badge }} rounded-pill px-2 py-0.5" style="font-size: 0.7rem;">
+                                    <td class="text-center text-nowrap">
+                                        <span class="badge-editorial badge-{{ $order->status_badge }}">
                                             {{ $order->status_label }}
                                         </span>
                                     </td>
-                                    <td class="text-end">
+                                    <td class="text-center text-nowrap">
                                         <a href="{{ route('admin.orders.show', $order->id) }}" class="btn btn-sm btn-shadcn-outline py-1 px-2.5" style="font-size: 0.75rem;">
                                             Detail
                                         </a>
@@ -226,17 +226,17 @@
                     <h6 class="font-serif-book fw-bold mb-0 text-dark" style="font-size: 0.95rem;">Pesan Pelanggan</h6>
                 </div>
                 @if($unreadMessages > 0)
-                    <span class="badge bg-danger rounded-pill" style="font-size: 0.7rem;">{{ $unreadMessages }} Baru</span>
+                    <span class="badge-editorial badge-editorial-rose">{{ $unreadMessages }} Baru</span>
                 @endif
             </div>
 
-            <div class="p-3 bg-light rounded-2 border mb-3">
+            <div class="p-3 rounded-3 mb-3" style="background-color: #faf7f2; border: 1px solid var(--border-color);">
                 <span class="text-muted small d-block">Pesan belum dibuka:</span>
                 <div class="font-serif-book fs-4 fw-bold text-dark">{{ $unreadMessages }} Pesan</div>
-                <small class="text-muted">Dari formulir <em>Contact to Admin</em></small>
+                <small class="text-muted">Dari formulir <em>Hubungi Kami</em></small>
             </div>
 
-            <a href="{{ route('admin.contacts.index') }}" class="btn btn-sm btn-shadcn-outline w-100">
+            <a href="{{ route('admin.contacts.index') }}" class="btn btn-sm btn-shadcn-outline w-100 py-2">
                 Buka Kotak Masuk Pesan
             </a>
         </div>
@@ -251,19 +251,19 @@
 
             <div class="d-flex flex-column gap-2 mb-3">
                 @forelse($categoriesList as $cat)
-                    <div class="d-flex align-items-center justify-content-between p-2 rounded-2 bg-light border">
+                    <div class="d-flex align-items-center justify-content-between p-2 rounded-3" style="background-color: #faf7f2; border: 1px solid var(--border-color);">
                         <div class="d-flex align-items-center gap-2 overflow-hidden">
-                            <i class="bi bi-folder2 text-secondary"></i>
+                            <i class="bi bi-tag text-muted"></i>
                             <span class="fw-semibold text-dark small text-truncate" style="max-width: 150px;">{{ $cat->name }}</span>
                         </div>
-                        <span class="badge bg-white text-dark border small fw-normal">{{ $cat->books_count }} buku</span>
+                        <span class="badge-editorial badge-editorial-stone">{{ $cat->books_count }} buku</span>
                     </div>
                 @empty
                     <div class="text-center text-muted small py-3">Belum ada kategori.</div>
                 @endforelse
             </div>
 
-            <a href="{{ route('admin.categories.index') }}" class="btn btn-sm btn-shadcn-outline w-100 d-inline-flex align-items-center justify-content-center gap-1.5">
+            <a href="{{ route('admin.categories.index') }}" class="btn btn-sm btn-shadcn-outline w-100 py-2 d-inline-flex align-items-center justify-content-center gap-1.5">
                 <span>Kelola Semua Kategori</span>
             </a>
         </div>

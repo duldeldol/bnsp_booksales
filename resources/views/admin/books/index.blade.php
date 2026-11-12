@@ -58,71 +58,75 @@
         <table class="shadcn-table">
             <thead>
                 <tr>
-                    <th style="width: 50px;">No</th>
-                    <th style="width: 70px;">Sampul</th>
+                    <th class="text-center" style="width: 50px;">No</th>
+                    <th class="text-center" style="width: 70px;">Sampul</th>
                     <th>Judul & Penulis</th>
-                    <th>Kategori</th>
-                    <th>Harga</th>
-                    <th>Stok</th>
-                    <th style="width: 130px;" class="text-end">Aksi</th>
+                    <th class="text-center">Kategori</th>
+                    <th class="text-center">Harga</th>
+                    <th class="text-center">Stok</th>
+                    <th class="text-center" style="width: 100px;">Aksi</th>
                 </tr>
             </thead>
             <tbody>
                 @forelse($books as $index => $book)
                     <tr>
-                        <td class="text-muted">{{ $books->firstItem() + $index }}</td>
-                        <td>
+                        <td class="text-center text-muted">{{ $books->firstItem() + $index }}</td>
+                        <td class="text-center">
                             <img src="{{ $book->cover_url }}" alt="Cover" class="rounded border shadow-xs" style="width: 38px; height: 52px; object-fit: cover;">
                         </td>
                         <td>
                             <div class="font-serif-book fw-bold text-dark fs-6">{{ $book->title }}</div>
-                            <div class="text-muted small">Penulis: {{ $book->author }} @if($book->publisher) • Penerbit: {{ $book->publisher }} @endif</div>
+                            <div class="text-muted small">Penulis: {{ $book->author }} @if($book->publisher) | Penerbit: {{ $book->publisher }} @endif</div>
                         </td>
-                        <td>
-                            <span class="badge bg-light text-secondary border fw-normal">
+                        <td class="text-center text-nowrap">
+                            <span class="badge-editorial badge-editorial-stone">
                                 {{ $book->category ? $book->category->name : 'Umum' }}
                             </span>
                         </td>
-                        <td class="fw-semibold text-dark">{{ $book->formatted_price }}</td>
-                        <td>
+                        <td class="text-center fw-semibold text-dark text-nowrap">{{ $book->formatted_price }}</td>
+                        <td class="text-center text-nowrap">
                             @if($book->stock > 5)
-                                <span class="badge bg-success-subtle text-success border border-success-subtle rounded-pill">
+                                <span class="badge-editorial badge-editorial-emerald">
                                     {{ $book->stock }} pcs
                                 </span>
                             @elseif($book->stock > 0)
-                                <span class="badge bg-warning-subtle text-warning-emphasis border border-warning-subtle rounded-pill">
+                                <span class="badge-editorial badge-editorial-amber">
                                     Sisa {{ $book->stock }} pcs
                                 </span>
                             @else
-                                <span class="badge bg-danger-subtle text-danger border border-danger-subtle rounded-pill">
+                                <span class="badge-editorial badge-editorial-rose">
                                     Habis
                                 </span>
                             @endif
                         </td>
-                        <td class="text-end">
-                            <a href="{{ route('admin.books.edit', $book->id) }}" class="btn btn-sm btn-light border py-1 px-2 me-1" title="Edit">
-                                <i class="bi bi-pencil"></i>
-                            </a>
-                            <button type="button" class="btn btn-sm btn-light border text-danger py-1 px-2" data-bs-toggle="modal" data-bs-target="#deleteBook{{ $book->id }}" title="Hapus">
-                                <i class="bi bi-trash"></i>
-                            </button>
+                        <td class="text-center text-nowrap" style="width: 100px;">
+                            <div class="d-inline-flex align-items-center gap-1 justify-content-center">
+                                <a href="{{ route('admin.books.edit', $book->id) }}" class="btn btn-sm btn-light border py-1 px-2" title="Edit">
+                                    <i class="bi bi-pencil"></i>
+                                </a>
+                                <button type="button" class="btn btn-sm btn-light border text-danger py-1 px-2" data-bs-toggle="modal" data-bs-target="#deleteBook{{ $book->id }}" title="Hapus">
+                                    <i class="bi bi-trash"></i>
+                                </button>
+                            </div>
 
                             <!-- Delete Modal -->
                             <div class="modal fade text-start" id="deleteBook{{ $book->id }}" tabindex="-1">
                                 <div class="modal-dialog modal-dialog-centered">
-                                    <div class="modal-content border-0 shadow" style="border-radius: 12px;">
+                                    <div class="modal-content">
                                         <form action="{{ route('admin.books.destroy', $book->id) }}" method="POST">
                                             @csrf
                                             @method('DELETE')
-                                            <div class="modal-header border-0 pb-0">
-                                                <h6 class="modal-title fw-bold text-dark">Hapus Data Buku</h6>
+                                            <div class="modal-header">
+                                                <h6 class="modal-title text-danger">Hapus Data Buku</h6>
                                                 <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                                             </div>
-                                            <div class="modal-body py-3">
-                                                <p class="text-secondary small mb-1">Apakah Anda yakin ingin menghapus buku berikut?</p>
-                                                <div class="fw-semibold text-dark">"{{ $book->title }}"</div>
+                                            <div class="modal-body">
+                                                <p class="text-secondary small mb-2">Apakah Anda yakin ingin menghapus buku berikut dari katalog?</p>
+                                                <div class="p-2 rounded-2 bg-light border fw-semibold text-dark small">
+                                                    "{{ $book->title }}" <span class="text-muted fw-normal">oleh {{ $book->author }}</span>
+                                                </div>
                                             </div>
-                                            <div class="modal-footer border-0 pt-0">
+                                            <div class="modal-footer">
                                                 <button type="button" class="btn btn-sm btn-shadcn-outline" data-bs-dismiss="modal">Batal</button>
                                                 <button type="submit" class="btn btn-sm btn-danger rounded-2">Hapus Buku</button>
                                             </div>
@@ -147,7 +151,7 @@
 
     @if($books->hasPages())
         <div class="p-3 border-top">
-            {{ $books->links('pagination::bootstrap-5') }}
+            {{ $books->links('admin.pagination') }}
         </div>
     @endif
 </div>

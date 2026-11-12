@@ -191,9 +191,169 @@
             color: var(--color-gold);
             text-decoration: underline;
         }
+
+        /* Authentic Bookstore Alerts & Floating Pop-up */
+        .bookstore-toast-wrapper {
+            position: fixed;
+            top: 1.5rem;
+            right: 1.5rem;
+            z-index: 1090;
+            min-width: 320px;
+            max-width: 420px;
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+            pointer-events: none;
+        }
+
+        @media (max-width: 576px) {
+            .bookstore-toast-wrapper {
+                top: 1rem;
+                left: 1rem;
+                right: 1rem;
+                min-width: auto;
+            }
+        }
+
+        .bookstore-alert {
+            pointer-events: auto;
+            background: #ffffff;
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            box-shadow: 0 12px 24px -6px rgba(28, 25, 23, 0.15), 0 6px 12px -4px rgba(28, 25, 23, 0.08);
+            padding: 0.85rem 1rem;
+            display: flex;
+            align-items: flex-start;
+            gap: 0.75rem;
+            transform: translateY(0);
+            opacity: 1;
+            transition: opacity 0.35s ease, transform 0.35s ease, max-height 0.4s ease, margin 0.4s ease, padding 0.4s ease;
+            overflow: hidden;
+        }
+
+        .bookstore-alert.hiding {
+            opacity: 0;
+            transform: translateY(-8px);
+            max-height: 0 !important;
+            padding-top: 0 !important;
+            padding-bottom: 0 !important;
+            margin-bottom: 0 !important;
+            border-width: 0 !important;
+        }
+
+        .bookstore-alert-success {
+            border-left: 4px solid #059669;
+        }
+
+        .bookstore-alert-error {
+            border-left: 4px solid #dc2626;
+        }
+
+        .toast-icon-box {
+            width: 32px;
+            height: 32px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.05rem;
+            flex-shrink: 0;
+        }
+
+        .bookstore-alert-success .toast-icon-box {
+            background-color: #ecfdf5;
+            color: #047857;
+            border: 1px solid #d1fae5;
+        }
+
+        .bookstore-alert-error .toast-icon-box {
+            background-color: #fef2f2;
+            color: #dc2626;
+            border: 1px solid #fee2e2;
+        }
+
+        .toast-content {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .toast-title {
+            font-family: 'Lora', Georgia, serif;
+            font-weight: 700;
+            font-size: 0.88rem;
+            margin-bottom: 0.15rem;
+            line-height: 1.25;
+        }
+
+        .bookstore-alert-success .toast-title {
+            color: #064e3b;
+        }
+
+        .bookstore-alert-error .toast-title {
+            color: #7f1d1d;
+        }
+
+        .toast-message {
+            color: #4b5563;
+            font-size: 0.8rem;
+            line-height: 1.35;
+        }
+
+        .toast-close-btn {
+            background: transparent;
+            border: none;
+            color: #9ca3af;
+            padding: 0;
+            cursor: pointer;
+            font-size: 1.15rem;
+            line-height: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: color 0.15s ease;
+            margin-left: 0.25rem;
+            margin-top: 1px;
+        }
+
+        .toast-close-btn:hover {
+            color: #1f2937;
+        }
     </style>
 </head>
 <body>
+
+<!-- Floating Bookstore Toast Container (Outside Card) -->
+<div class="bookstore-toast-wrapper" id="toastContainer">
+    @if(session('success'))
+        <div class="bookstore-alert bookstore-alert-success" role="alert">
+            <div class="toast-icon-box">
+                <i class="bi bi-check2-circle"></i>
+            </div>
+            <div class="toast-content">
+                <div class="toast-title">Berhasil</div>
+                <div class="toast-message">{{ session('success') }}</div>
+            </div>
+            <button type="button" class="toast-close-btn" onclick="dismissToast(this.closest('.bookstore-alert'))" aria-label="Tutup">
+                <i class="bi bi-x"></i>
+            </button>
+        </div>
+    @endif
+
+    @if(session('error'))
+        <div class="bookstore-alert bookstore-alert-error" role="alert">
+            <div class="toast-icon-box">
+                <i class="bi bi-exclamation-octagon"></i>
+            </div>
+            <div class="toast-content">
+                <div class="toast-title">Perhatian</div>
+                <div class="toast-message">{{ session('error') }}</div>
+            </div>
+            <button type="button" class="toast-close-btn" onclick="dismissToast(this.closest('.bookstore-alert'))" aria-label="Tutup">
+                <i class="bi bi-x"></i>
+            </button>
+        </div>
+    @endif
+</div>
 
 <div class="auth-card">
     <!-- Brand & Title -->
@@ -206,21 +366,6 @@
         </a>
         <p class="text-muted small mb-0">Masuk ke akun Anda untuk melanjutkan belanja & kelola katalog</p>
     </div>
-
-    <!-- Flash Alerts -->
-    @if(session('success'))
-        <div class="alert alert-success border py-2 px-3 small rounded-3 mb-3 d-flex align-items-center gap-2" role="alert">
-            <i class="bi bi-check-circle-fill text-success"></i>
-            <div>{{ session('success') }}</div>
-        </div>
-    @endif
-
-    @if(session('error'))
-        <div class="alert alert-danger border py-2 px-3 small rounded-3 mb-3 d-flex align-items-center gap-2" role="alert">
-            <i class="bi bi-exclamation-triangle-fill text-danger"></i>
-            <div>{{ session('error') }}</div>
-        </div>
-    @endif
 
     <!-- Login Form -->
     <form action="{{ route('login.post') }}" method="POST">
@@ -311,8 +456,27 @@
         document.getElementById('passwordInput').value = pass;
     }
 
+    function dismissToast(toastEl) {
+        if (!toastEl || toastEl.classList.contains('hiding')) return;
+        toastEl.classList.add('hiding');
+        setTimeout(function () {
+            if (toastEl.parentNode) {
+                toastEl.parentNode.removeChild(toastEl);
+            }
+        }, 400);
+    }
+
     function setupAutoDismissAlerts() {
-        const alerts = document.querySelectorAll('.alert');
+        // Bookstore alerts
+        const bookstoreAlerts = document.querySelectorAll('.bookstore-alert');
+        bookstoreAlerts.forEach(function (toast) {
+            setTimeout(function () {
+                dismissToast(toast);
+            }, 3000);
+        });
+
+        // Fallback for regular alerts
+        const alerts = document.querySelectorAll('.alert:not(.bookstore-alert)');
         alerts.forEach(function (alert) {
             setTimeout(function () {
                 alert.style.transition = 'opacity 0.4s ease, max-height 0.4s ease, margin 0.4s ease, padding 0.4s ease';

@@ -71,7 +71,9 @@ class BookController extends Controller
         ]);
 
         if ($request->hasFile('cover_image')) {
-            $validated['cover_image'] = $request->file('cover_image')->store('books', 'public');
+            /** @var \Illuminate\Http\UploadedFile $file */
+            $file = $request->file('cover_image');
+            $validated['cover_image'] = $file->store('books', 'public');
         }
 
         Book::create($validated);
@@ -106,7 +108,9 @@ class BookController extends Controller
             if ($book->cover_image && !str_starts_with($book->cover_image, 'http')) {
                 Storage::disk('public')->delete($book->cover_image);
             }
-            $validated['cover_image'] = $request->file('cover_image')->store('books', 'public');
+            /** @var \Illuminate\Http\UploadedFile $file */
+            $file = $request->file('cover_image');
+            $validated['cover_image'] = $file->store('books', 'public');
         }
 
         $book->update($validated);

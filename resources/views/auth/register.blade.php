@@ -379,7 +379,7 @@
             @enderror
         </div>
 
-        <div class="mb-3">
+        <div class="mb-4">
             <label class="form-label">Konfirmasi Password <span class="text-danger">*</span></label>
             <div class="input-group">
                 <span class="input-group-text border-end-0"><i class="bi bi-shield-lock"></i></span>
@@ -388,25 +388,6 @@
                     <i class="bi bi-eye" id="regConfirmEyeIcon"></i>
                 </button>
             </div>
-        </div>
-
-        <div class="mb-3">
-            <label class="form-label">Nomor WhatsApp / HP</label>
-            <div class="input-group">
-                <span class="input-group-text border-end-0"><i class="bi bi-phone"></i></span>
-                <input type="text" name="phone" class="form-control border-start-0 @error('phone') is-invalid @enderror" value="{{ old('phone') }}" placeholder="Contoh: 08123456789">
-            </div>
-            @error('phone')
-                <div class="text-danger small mt-1" style="font-size: 0.75rem;">{{ $message }}</div>
-            @enderror
-        </div>
-
-        <div class="mb-4">
-            <label class="form-label">Alamat Pengiriman</label>
-            <textarea name="address" rows="2" class="form-control @error('address') is-invalid @enderror" placeholder="Nama jalan, nomor rumah, RT/RW, kota">{{ old('address') }}</textarea>
-            @error('address')
-                <div class="text-danger small mt-1" style="font-size: 0.75rem;">{{ $message }}</div>
-            @enderror
         </div>
 
         <button type="submit" class="btn btn-book-primary w-100">

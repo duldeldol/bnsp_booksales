@@ -196,9 +196,18 @@
                                 <span class="boutique-price">
                                     {{ $book->formatted_price }}
                                 </span>
-                                <button type="button" class="btn-boutique-action" data-bs-toggle="modal" data-bs-target="#modalBookDetail{{ $book->id }}">
-                                    Detail Buku
-                                </button>
+                                <div class="d-flex align-items-center" style="gap: 9px;">
+                                    <button type="button" class="btn-boutique-action" data-bs-toggle="modal" data-bs-target="#modalBookDetail{{ $book->id }}">
+                                        Detail
+                                    </button>
+                                    <form action="{{ route('cart.add', $book->id) }}" method="POST" class="d-inline form-add-to-cart m-0">
+                                        @csrf
+                                        <input type="hidden" name="quantity" value="1">
+                                        <button type="submit" class="btn btn-sm btn-book-primary p-0 d-inline-flex align-items-center justify-content-center" style="width: 32px; height: 32px; border-radius: 50%;" title="Tambah 1 ke Keranjang" {{ $book->stock <= 0 ? 'disabled' : '' }}>
+                                            <i class="bi bi-cart-plus" style="font-size: 0.95rem;"></i>
+                                        </button>
+                                    </form>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -323,10 +332,15 @@
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-book-outline" data-bs-dismiss="modal">Tutup</button>
-                    <a href="https://wa.me/6285173350405?text=Halo%20Admin%20BookStore,%20saya%20tertarik%20memesan%20buku:%20{{ urlencode($mBook->title) }}%20(Harga:%20{{ urlencode($mBook->formatted_price) }})" target="_blank" class="btn btn-book-primary">
-                        Pesan via WhatsApp
-                    </a>
+                    <form action="{{ route('cart.add', $mBook->id) }}" method="POST" class="w-100 form-add-to-cart m-0">
+                        @csrf
+                        <div class="d-flex align-items-center justify-content-end gap-2 w-100">
+                            <button type="button" class="btn btn-book-outline" data-bs-dismiss="modal">Tutup</button>
+                            <button type="submit" class="btn btn-book-primary" {{ $mBook->stock <= 0 ? 'disabled' : '' }}>
+                                <i class="bi bi-cart-plus me-1"></i> Keranjang
+                            </button>
+                        </div>
+                    </form>
                 </div>
             </div>
         </div>

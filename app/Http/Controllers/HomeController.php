@@ -11,17 +11,19 @@ class HomeController extends Controller
 {
     public function index()
     {
-        // 3 Buku Ikonik untuk 3 Arch Pedestals di Hero (Atomic Habits, Ikigai di tengah, The Psychology of Money)
-        $heroBooks = Book::whereIn('id', [5, 6, 3])->orderByRaw("FIELD(id, 5, 6, 3)")->get();
+        // 3 Buku Ikonik untuk 3 Arch Pedestals di Hero
+        $heroBooks = Book::whereIn('title', ['Bumi Manusia', 'Laut Bercerita', 'Filosofi Teras'])
+            ->orderByRaw("FIELD(title, 'Bumi Manusia', 'Laut Bercerita', 'Filosofi Teras')")
+            ->get();
         if ($heroBooks->count() < 3) {
             $heroBooks = Book::take(3)->get();
         }
 
-        // 4 Buku Rekomendasi Pilihan Toko dengan Judul & Sampul Asli Terverifikasi
-        $recommendedBooks = Book::with('category')->whereIn('id', [1, 4, 9, 10])->orderByRaw("FIELD(id, 1, 4, 9, 10)")->get();
-        if ($recommendedBooks->count() < 4) {
-            $recommendedBooks = Book::with('category')->whereNotIn('id', $heroBooks->pluck('id'))->take(4)->get();
-        }
+        // 4 Buku Rekomendasi Pilihan Toko di Bawah Hero
+        $recommendedBooks = Book::with('category')
+            ->whereNotIn('id', $heroBooks->pluck('id'))
+            ->take(4)
+            ->get();
 
         // Daftar Kategori untuk Section Kategori Pilihan
         $categories = Category::withCount('books')->get();

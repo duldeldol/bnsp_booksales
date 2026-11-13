@@ -129,8 +129,7 @@
             color: var(--color-gold-hover);
             background-color: var(--color-gold-light);
             font-weight: 600;
-            border-left: 3px solid var(--color-gold);
-            border-radius: 0 8px 8px 0;
+            border-radius: 8px;
         }
         .sidebar-menu .nav-link.active i {
             color: var(--color-gold);
@@ -360,7 +359,7 @@
             opacity: 0.65;
         }
 
-        /* Authentic BookStore Modals */
+        /* Authentic Modals */
         .modal-content {
             background: #ffffff;
             border: 1px solid var(--border-color) !important;

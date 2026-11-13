@@ -4,20 +4,16 @@ namespace Database\Seeders;
 
 use App\Models\Book;
 use App\Models\Category;
-use App\Models\Contact;
-use App\Models\Order;
-use App\Models\OrderItem;
 use App\Models\User;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Str;
 
 class DatabaseSeeder extends Seeder
 {
     public function run(): void
     {
-        // 1. Users
-        $admin = User::firstOrCreate(['email' => 'admin@bookstore.com'], [
+        // 1. Akun Admin Utama (Duul)
+        User::firstOrCreate(['email' => 'admin@bookstore.com'], [
             'name' => 'Duul',
             'password' => Hash::make('password123'),
             'role' => 'admin',
@@ -25,142 +21,186 @@ class DatabaseSeeder extends Seeder
             'address' => 'Jl. Merdeka No. 10, Jakarta Pusat',
         ]);
 
-        $customer = User::firstOrCreate(['email' => 'user@bookstore.com'], [
-            'name' => 'Budi Pratama',
-            'password' => Hash::make('password123'),
-            'role' => 'customer',
-            'phone' => '089876543210',
-            'address' => 'Jl. Sudirman No. 45, Bandung',
-        ]);
-
-        $customer2 = User::firstOrCreate(['email' => 'budi@bookstore.com'], [
-            'name' => 'Budi Santoso',
-            'password' => Hash::make('password123'),
-            'role' => 'customer',
-            'phone' => '081399887766',
-            'address' => 'Jl. Gatot Subroto No. 88, Jakarta Pusat',
-        ]);
-
-        // 2. Categories
+        // 2. Kategori Buku Indonesia
         $categories = [
-            'teknologi' => Category::firstOrCreate(['name' => 'Teknologi & Komputer'], [
-                'description' => 'Buku seputar pemrograman web, AI, data science, dan infrastruktur IT.',
+            'sastra_sejarah' => Category::firstOrCreate(['name' => 'Sastra & Fiksi Sejarah'], [
+                'description' => 'Novel berlatar peristiwa bersejarah, memoar perjuangan, dan roman peradaban Nusantara.',
             ]),
-            'bisnis' => Category::firstOrCreate(['name' => 'Bisnis & Finansial'], [
-                'description' => 'Panduan investasi, literasi keuangan, dan strategi pengembangan bisnis.',
+            'sastra_novel' => Category::firstOrCreate(['name' => 'Sastra & Novel Indonesia'], [
+                'description' => 'Karya fiksi sastra modern, novel realisme magis, dan cerita pendek karya sastrawan Indonesia.',
             ]),
-            'self_dev' => Category::firstOrCreate(['name' => 'Pengembangan Diri'], [
-                'description' => 'Buku motivasi, produktivitas, manajemen kebiasaan, dan psikologi praktis.',
+            'filsafat_diri' => Category::firstOrCreate(['name' => 'Filsafat & Pengembangan Diri'], [
+                'description' => 'Renungan filsafat kehidupan, panduan kesehatan mental, dan pengenalan batin yang membumi.',
             ]),
-            'fiksi' => Category::firstOrCreate(['name' => 'Fiksi & Sastra'], [
-                'description' => 'Novel inspiratif, fiksi ilmiah, sastra klasik, dan antologi cerita.',
+            'sosial_politik' => Category::firstOrCreate(['name' => 'Pemikiran & Sosial Politik'], [
+                'description' => 'Kajian pemikiran kritis, catatan aktivisme, dinamika sosial, dan esai kebangsaan Indonesia.',
             ]),
-            'sains' => Category::firstOrCreate(['name' => 'Sains & Pengetahuan'], [
-                'description' => 'Eksplorasi alam semesta, biologi, sejarah peradaban, dan ilmu fisika.',
+            'puisi_antologi' => Category::firstOrCreate(['name' => 'Sastra & Antologi Puisi'], [
+                'description' => 'Kumpulan bait puisi reflektif, sajak kontemplatif, dan antologi literasi puitis Nusantara.',
             ]),
         ];
 
-        // 3. Books
+        // 3. 16 Buku Pilihan Indonesia Berkualitas
         $books = [
             [
-                'category_id' => $categories['teknologi']->id,
-                'title' => 'Clean Code: A Handbook of Agile Software Craftsmanship',
-                'author' => 'Robert C. Martin',
-                'publisher' => 'Prentice Hall',
-                'price' => 175000,
-                'stock' => 15,
-                'cover_image' => 'https://covers.openlibrary.org/b/isbn/9780132350884-L.jpg',
-                'description' => 'Buku panduan utama bagi software engineer untuk menulis kode yang rapi, mudah dirawat, dan terhindar dari technical debt.',
+                'category_id' => $categories['sastra_sejarah']->id,
+                'title' => 'Laut Bercerita',
+                'author' => 'Leila S. Chudori',
+                'publisher' => 'Kepustakaan Populer Gramedia',
+                'price' => 115000,
+                'stock' => 20,
+                'cover_image' => 'images/covers/laut-bercerita.jpg',
+                'description' => 'Menelusuri kepedihan dan keteguhan keluarga korban penghilangan paksa aktivis mahasiswa era Reformasi 1998 yang tenggelam di dasar laut namun suaranya tak pernah padam.',
             ],
             [
-                'category_id' => $categories['teknologi']->id,
-                'title' => 'Clean Architecture: A Craftsman\'s Guide to Software Structure',
-                'author' => 'Robert C. Martin',
-                'publisher' => 'Prentice Hall',
-                'price' => 185000,
-                'stock' => 15,
-                'cover_image' => 'https://covers.openlibrary.org/b/isbn/9780134494166-L.jpg',
-                'description' => 'Panduan esensial mengenai arsitektur perangkat lunak, aturan desain sistem modular, dan pemisahan dependensi modern.',
+                'category_id' => $categories['sastra_sejarah']->id,
+                'title' => 'Bumi Manusia',
+                'author' => 'Pramoedya Ananta Toer',
+                'publisher' => 'Lentera Dipantara',
+                'price' => 135000,
+                'stock' => 22,
+                'cover_image' => 'images/covers/bumi-manusia.jpg',
+                'description' => 'Kisah kebangkitan kesadaran nasional Minke di tengah pergulatan feodalisme Jawa dan kekuasaan hukum kolonial Hindia Belanda awal abad ke-20.',
             ],
             [
-                'category_id' => $categories['bisnis']->id,
-                'title' => 'The Psychology of Money',
-                'author' => 'Morgan Housel',
-                'publisher' => 'Harriman House',
+                'category_id' => $categories['sastra_sejarah']->id,
+                'title' => 'Burung-Burung Manyar',
+                'author' => 'Y.B. Mangunwijaya',
+                'publisher' => 'Penerbit Buku Kompas',
+                'price' => 95000,
+                'stock' => 18,
+                'cover_image' => 'images/covers/burung-burung-manyar.jpg',
+                'description' => 'Roman berlatar revolusi kemerdekaan Indonesia yang menelusuri pergulatan batin Setadewa dan Larasati di antara cinta, ideologi, dan humanisme sejati.',
+            ],
+            [
+                'category_id' => $categories['sastra_sejarah']->id,
+                'title' => 'Gadis Kretek',
+                'author' => 'Ratih Kumala',
+                'publisher' => 'Gramedia Pustaka Utama',
+                'price' => 95000,
+                'stock' => 19,
+                'cover_image' => 'images/covers/gadis-kretek.jpg',
+                'description' => 'Menelusuri jejak cinta Jeng Yah dan racikan saus kretek legendaris di tanah Jawa yang menyatukan romansa, bisnis tembakau, dan rahasia keluarga.',
+            ],
+            [
+                'category_id' => $categories['sastra_sejarah']->id,
+                'title' => 'Namaku Alam',
+                'author' => 'Leila S. Chudori',
+                'publisher' => 'Kepustakaan Populer Gramedia',
+                'price' => 120000,
+                'stock' => 20,
+                'cover_image' => 'images/covers/namaku-alam.jpg',
+                'description' => 'Menelusuri pergulatan batin Segara Alam yang tumbuh besar dengan memori fotografis dan stigma anak eks-tapol peristiwa 1965, berjuang menegakkan martabat diri di tengah penghakiman sosial.',
+            ],
+            [
+                'category_id' => $categories['sastra_novel']->id,
+                'title' => 'Orang-Orang Bloomington',
+                'author' => 'Budi Darma',
+                'publisher' => 'Noura Books',
+                'price' => 88000,
+                'stock' => 15,
+                'cover_image' => 'images/covers/orang-orang-bloomington.jpg',
+                'description' => 'Kumpulan kisah psikologis yang membedah keterasingan, prasangka, dan kesepian jiwa manusia di sebuah kota kecil di Indiana, Amerika Serikat.',
+            ],
+            [
+                'category_id' => $categories['sastra_novel']->id,
+                'title' => 'Cantik Itu Luka',
+                'author' => 'Eka Kurniawan',
+                'publisher' => 'Gramedia Pustaka Utama',
+                'price' => 110000,
+                'stock' => 16,
+                'cover_image' => 'images/covers/cantik-itu-luka.jpg',
+                'description' => 'Kisah epik berbalut realisme magis di Halimunda yang merajut tragedi kolonialisme, kutukan kecantikan, dan sejarah kelam Nusantara.',
+            ],
+            [
+                'category_id' => $categories['sastra_novel']->id,
+                'title' => 'Saman',
+                'author' => 'Ayu Utami',
+                'publisher' => 'Kepustakaan Populer Gramedia',
+                'price' => 85000,
+                'stock' => 15,
+                'cover_image' => 'images/covers/saman.jpg',
+                'description' => 'Karya pendobrak sastra Indonesia modern yang mengangkat kebebasan perempuan, pergolakan batin seorang pastor, dan aktivisme perkebunan karet.',
+            ],
+            [
+                'category_id' => $categories['sastra_novel']->id,
+                'title' => 'Ronggeng Dukuh Paruk',
+                'author' => 'Ahmad Tohari',
+                'publisher' => 'Gramedia Pustaka Utama',
+                'price' => 105000,
+                'stock' => 17,
+                'cover_image' => 'images/covers/ronggeng-dukuh-paruk.jpg',
+                'description' => 'Kisah menggetarkan tentang Srintil, penari ronggeng di pedukuhan terpencil yang nasibnya terseret pusaran tragis pergolakan politik 1965.',
+            ],
+            [
+                'category_id' => $categories['sastra_novel']->id,
+                'title' => 'Khotbah di Atas Bukit',
+                'author' => 'Kuntowijoyo',
+                'publisher' => 'Bentang Pustaka',
+                'price' => 82000,
+                'stock' => 16,
+                'cover_image' => 'images/covers/khotbah-di-atas-bukit.jpg',
+                'description' => 'Novel eksistensial mistik tentang pencarian makna hidup sejati di atas bukit sunyi setelah pensiun dari keduniawian.',
+            ],
+            [
+                'category_id' => $categories['sastra_novel']->id,
+                'title' => 'Seporsi Mie Ayam Sebelum Mati',
+                'author' => 'Brian Khrisna',
+                'publisher' => 'Grasindo',
+                'price' => 88000,
+                'stock' => 20,
+                'cover_image' => 'images/covers/seporsi-mie-ayam-sebelum-mati.jpg',
+                'description' => 'Kisah tentang Ale yang berencana mengakhiri hidupnya namun memutuskan menyantap semangkuk mie ayam terenak untuk terakhir kalinya, membuka perjalanan hangat tentang luka batin, harapan, dan arti melanjutkan hidup.',
+            ],
+            [
+                'category_id' => $categories['filsafat_diri']->id,
+                'title' => 'Filosofi Teras',
+                'author' => 'Henry Manampiring',
+                'publisher' => 'Penerbit Buku Kompas',
                 'price' => 98000,
                 'stock' => 25,
-                'cover_image' => 'https://covers.openlibrary.org/b/isbn/9780857197689-L.jpg',
-                'description' => 'Pelajaran abadi mengenai kekayaan, keserakahan, dan kebahagiaan serta bagaimana perilaku manusia memengaruhi finansial.',
+                'cover_image' => 'images/covers/filosofi-teras.jpg',
+                'description' => 'Panduan praktis filsafat Stoisisme kuno yang disesuaikan secara membumi untuk mengatasi kecemasan dan overthinking generasi masa kini.',
             ],
             [
-                'category_id' => $categories['bisnis']->id,
-                'title' => 'Rich Dad Poor Dad',
-                'author' => 'Robert T. Kiyosaki',
-                'publisher' => 'Gramedia Pustaka',
-                'price' => 88000,
-                'stock' => 18,
-                'cover_image' => 'https://covers.openlibrary.org/b/isbn/9781612680194-L.jpg',
-                'description' => 'Buku dasar literasi keuangan yang mengajarkan apa yang diajarkan orang kaya kepada anak-anak mereka tentang uang.',
-            ],
-            [
-                'category_id' => $categories['self_dev']->id,
-                'title' => 'Atomic Habits: Perubahan Kecil yang Memberikan Hasil Luar Biasa',
-                'author' => 'James Clear',
-                'publisher' => 'Gramedia Pustaka Utama',
-                'price' => 108000,
-                'stock' => 30,
-                'cover_image' => 'https://covers.openlibrary.org/b/isbn/9780735211292-L.jpg',
-                'description' => 'Cara praktis dan terbukti ilmiah membangun kebiasaan baik dan membuang kebiasaan buruk setiap hari.',
-            ],
-            [
-                'category_id' => $categories['self_dev']->id,
-                'title' => 'Ikigai: Rahasia Hidup Bahagia dan Panjang Umur Orang Jepang',
-                'author' => 'Héctor García & Francesc Miralles',
-                'publisher' => 'Penguin Life',
-                'price' => 95000,
-                'stock' => 22,
-                'cover_image' => 'https://covers.openlibrary.org/b/isbn/9780143130727-L.jpg',
-                'description' => 'Menemukan tujuan hidup, filosofi keseimbangan batin, dan rahasia umur panjang penduduk pulau Okinawa, Jepang.',
-            ],
-            [
-                'category_id' => $categories['fiksi']->id,
-                'title' => 'The Great Gatsby',
-                'author' => 'F. Scott Fitzgerald',
-                'publisher' => 'Scribner',
-                'price' => 125000,
-                'stock' => 12,
-                'cover_image' => 'https://covers.openlibrary.org/b/isbn/9780743273565-L.jpg',
-                'description' => 'Mahakarya sastra klasik yang mengisahkan kemewahan, obsesi, cinta, dan ilusi impian Amerika pada era Jazz Age.',
-            ],
-            [
-                'category_id' => $categories['fiksi']->id,
-                'title' => 'To Kill a Mockingbird',
-                'author' => 'Harper Lee',
-                'publisher' => 'Harper Perennial',
-                'price' => 89000,
+                'category_id' => $categories['sosial_politik']->id,
+                'title' => 'Madilog: Materialisme, Dialektika, dan Logika',
+                'author' => 'Tan Malaka',
+                'publisher' => 'Narasi',
+                'price' => 120000,
                 'stock' => 14,
-                'cover_image' => 'https://covers.openlibrary.org/b/isbn/9780061120084-L.jpg',
-                'description' => 'Novel pemenang Hadiah Pulitzer tentang keadilan, empati, dan moralitas melalui sudut pandang seorang anak bernama Scout.',
+                'cover_image' => 'images/covers/madilog.jpg',
+                'description' => 'Mahakarya pemikiran Tan Malaka yang mengajak bangsa Indonesia membebaskan akal budi dari kungkungan tahayul menuju cara berpikir rasional dan ilmiah.',
             ],
             [
-                'category_id' => $categories['sains']->id,
-                'title' => 'Cosmos: Menjelajah Alam Semesta',
-                'author' => 'Carl Sagan',
-                'publisher' => 'Kepustakaan Populer Gramedia',
-                'price' => 145000,
-                'stock' => 10,
-                'cover_image' => 'https://covers.openlibrary.org/b/isbn/9780345331359-L.jpg',
-                'description' => 'Eksplorasi puitis dan mendalam mengenai 15 miliar tahun evolusi kosmik, sains, peradaban manusia, dan masa depan.',
+                'category_id' => $categories['sosial_politik']->id,
+                'title' => 'Catatan Seorang Demonstran',
+                'author' => 'Soe Hok Gie',
+                'publisher' => 'LP3ES',
+                'price' => 92000,
+                'stock' => 20,
+                'cover_image' => 'images/covers/catatan-seorang-demonstran.jpg',
+                'description' => 'Buku harian jujur seorang pemuda idealis tentang integritas nurani, kecintaan pada alam, serta kegelisahan atas keadilan sosial.',
             ],
             [
-                'category_id' => $categories['sains']->id,
-                'title' => 'Sapiens: Riwayat Singkat Umat Manusia',
-                'author' => 'Yuval Noah Harari',
-                'publisher' => 'KPG Press',
-                'price' => 135000,
-                'stock' => 16,
-                'cover_image' => 'https://covers.openlibrary.org/b/isbn/9780062316097-L.jpg',
-                'description' => 'Membahas bagaimana sebuah spesies kera yang tidak signifikan kini berhasil menjadi penguasa planet Bumi.',
+                'category_id' => $categories['puisi_antologi']->id,
+                'title' => 'Melihat Api Bekerja',
+                'author' => 'M. Aan Mansyur',
+                'publisher' => 'Gramedia Pustaka Utama',
+                'price' => 78000,
+                'stock' => 15,
+                'cover_image' => 'images/covers/melihat-api-bekerja.jpg',
+                'description' => 'Antologi puisi puitis dan reflektif yang merekam kehilangan, rindu, dan kobaran api emosi manusia urban dalam bait-bait bernas.',
+            ],
+            [
+                'category_id' => $categories['puisi_antologi']->id,
+                'title' => 'Hujan Bulan Juni: Sepilihan Puisi',
+                'author' => 'Sapardi Djoko Damono',
+                'publisher' => 'Gramedia Pustaka Utama',
+                'price' => 75000,
+                'stock' => 20,
+                'cover_image' => 'images/covers/hujan-bulan-juni.jpg',
+                'description' => 'Kumpulan sajak magis dan liris Sapardi Djoko Damono tentang ketabahan, kearifan, dan kerinduan cinta yang tak terucapkan kepada pohon berbunga.',
             ],
         ];
 
@@ -169,71 +209,6 @@ class DatabaseSeeder extends Seeder
                 ['title' => $b['title']],
                 $b
             );
-        }
-
-        if (Order::count() === 0) {
-            $sampleBook1 = Book::first();
-            $sampleBook2 = Book::skip(1)->first();
-
-            $order = Order::create([
-                'order_number' => 'ORD-' . strtoupper(Str::random(8)),
-                'user_id' => $customer->id,
-                'customer_name' => $customer->name,
-                'customer_phone' => $customer->phone,
-                'shipping_address' => $customer->address,
-                'total_amount' => $sampleBook1->price + $sampleBook2->price,
-                'status' => 'paid',
-                'payment_method' => 'whatsapp',
-            ]);
-
-            OrderItem::create([
-                'order_id' => $order->id,
-                'book_id' => $sampleBook1->id,
-                'price' => $sampleBook1->price,
-                'quantity' => 1,
-                'subtotal' => $sampleBook1->price,
-            ]);
-
-            OrderItem::create([
-                'order_id' => $order->id,
-                'book_id' => $sampleBook2->id,
-                'price' => $sampleBook2->price,
-                'quantity' => 1,
-                'subtotal' => $sampleBook2->price,
-            ]);
-
-            $sampleBook3 = Book::skip(2)->first();
-            if ($sampleBook3) {
-                $order2 = Order::create([
-                    'order_number' => 'ORD-' . strtoupper(Str::random(8)),
-                    'user_id' => $customer2->id,
-                    'customer_name' => $customer2->name,
-                    'customer_phone' => $customer2->phone,
-                    'shipping_address' => $customer2->address,
-                    'total_amount' => $sampleBook3->price,
-                    'status' => 'pending',
-                    'payment_method' => 'cod',
-                ]);
-
-                OrderItem::create([
-                    'order_id' => $order2->id,
-                    'book_id' => $sampleBook3->id,
-                    'price' => $sampleBook3->price,
-                    'quantity' => 1,
-                    'subtotal' => $sampleBook3->price,
-                ]);
-            }
-        }
-
-        // 4. Sample Contact Message
-        if (Contact::count() === 0) {
-            Contact::create([
-                'name' => 'Dewi Sartika',
-                'email' => 'dewi@example.com',
-                'subject' => 'Pertanyaan Ketersediaan Stok Buku',
-                'message' => 'Halo Admin, apakah buku Clean Code tersedia untuk pemesanan dalam jumlah banyak (10 eksemplar)? Terima kasih.',
-                'is_read' => false,
-            ]);
         }
     }
 }

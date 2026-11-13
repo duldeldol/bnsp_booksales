@@ -4,12 +4,6 @@
 @section('page-title', 'Detail Transaksi ' . $order->order_number)
 
 @section('content')
-<div class="mb-4">
-    <a href="{{ route('admin.orders.index') }}" class="btn btn-shadcn-outline btn-sm">
-        <i class="bi bi-arrow-left me-1"></i> Kembali ke List Pesanan
-    </a>
-</div>
-
 <div class="row g-4">
     <!-- Left Column: Order Items Table -->
     <div class="col-lg-8">

@@ -47,9 +47,18 @@
             border-bottom: 1px solid var(--border-subtle);
             position: sticky;
             top: 0;
-            z-index: 1000;
+            z-index: 1040;
             padding: 1.1rem 0;
             transition: background-color 0.2s ease;
+        }
+
+        @keyframes badgeBounce {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.35); }
+            100% { transform: scale(1); }
+        }
+        .scale-bounce {
+            animation: badgeBounce 0.3s ease-in-out;
         }
 
         .brand-logo-text {
@@ -426,7 +435,7 @@
 </head>
 <body>
 
-    <!-- Floating Bookstore Toast Container -->
+    <!-- Floating Toast Container -->
     <div class="bookstore-toast-wrapper" id="toastContainer">
         @if(session('success'))
             <div class="bookstore-alert bookstore-alert-success" role="alert">
@@ -498,6 +507,15 @@
                 </ul>
 
                 <div class="d-flex align-items-center gap-2">
+                    <!-- Cart Button -->
+                    <a href="{{ route('cart.index') }}" id="navbarCartLink" class="btn btn-sm btn-book-outline position-relative d-inline-flex align-items-center gap-1 px-3 py-1.5 {{ request()->routeIs('cart.*') ? 'active' : '' }}" title="Keranjang Belanja">
+                        <i class="bi bi-cart3 fs-6"></i>
+                        <span class="d-none d-md-inline fw-semibold ms-1">Keranjang</span>
+                        <span id="navbarCartBadge" class="badge rounded-pill bg-dark text-white ms-1" style="font-size: 0.65rem; padding: 0.2em 0.45em; line-height: 1; letter-spacing: 0; {{ (isset($cartCount) && $cartCount > 0) ? '' : 'display: none;' }}">
+                            {{ $cartCount ?? 0 }}
+                        </span>
+                    </a>
+
                     @auth
                         <!-- Customer User Dropdown -->
                         <div class="dropdown">
@@ -512,13 +530,24 @@
                                     <div class="small fw-bold text-dark">{{ auth()->user()->name }}</div>
                                     <div class="small text-muted text-truncate">{{ auth()->user()->email }}</div>
                                 </li>
+                                <li>
+                                    <a class="dropdown-item small py-2" href="{{ route('orders.my') }}">
+                                        <i class="bi bi-bag-check me-2 text-warning"></i> Pesanan Saya
+                                    </a>
+                                </li>
                                 @if(auth()->user()->role === 'admin')
+                                    <li>
+                                        <hr class="dropdown-divider my-1">
+                                    </li>
                                     <li>
                                         <a class="dropdown-item small py-2" href="{{ route('admin.dashboard') }}">
                                             <i class="bi bi-speedometer2 me-2 text-primary"></i> Dashboard Admin
                                         </a>
                                     </li>
                                 @endif
+                                <li>
+                                    <hr class="dropdown-divider my-1">
+                                </li>
                                 <li>
                                     <form action="{{ route('logout') }}" method="POST">
                                         @csrf
@@ -548,7 +577,7 @@
         @yield('content')
     </main>
 
-    <!-- Seamless Warm Footer -->
+    <!-- Footer -->
     <footer class="store-footer">
         <div class="container">
             <div class="row g-4 mb-4">
@@ -606,6 +635,75 @@
                 }, 3000);
             });
         }
+
+        function updateNavbarCartCount(count) {
+            const badgeEl = document.getElementById('navbarCartBadge');
+            const cartLink = document.getElementById('navbarCartLink');
+            const parsedCount = parseInt(count) || 0;
+
+            if (parsedCount > 0) {
+                if (badgeEl) {
+                    badgeEl.textContent = parsedCount;
+                    badgeEl.style.display = 'inline-block';
+                    badgeEl.classList.remove('scale-bounce');
+                    void badgeEl.offsetWidth; // trigger reflow
+                    badgeEl.classList.add('scale-bounce');
+                }
+            } else if (badgeEl) {
+                badgeEl.style.display = 'none';
+            }
+        }
+
+        document.addEventListener('submit', function (e) {
+            const form = e.target.closest('.form-add-to-cart');
+            if (!form) return;
+
+            e.preventDefault();
+            const submitBtn = form.querySelector('button[type="submit"]');
+            const originalContent = submitBtn ? submitBtn.innerHTML : '';
+
+            if (submitBtn) {
+                submitBtn.disabled = true;
+                submitBtn.style.opacity = '0.75';
+            }
+
+            const formData = new FormData(form);
+
+            fetch(form.action, {
+                method: 'POST',
+                body: formData,
+                headers: {
+                    'X-Requested-With': 'XMLHttpRequest',
+                    'Accept': 'application/json'
+                }
+            })
+            .then(function (response) {
+                if (response.status === 401) {
+                    window.location.href = "{{ route('login') }}";
+                    return null;
+                }
+                return response.json();
+            })
+            .then(function (data) {
+                if (submitBtn) {
+                    submitBtn.disabled = false;
+                    submitBtn.style.opacity = '1';
+                }
+
+                if (data && data.success) {
+                    updateNavbarCartCount(data.cart_count);
+                } else if (data && data.message) {
+                    alert(data.message);
+                }
+            })
+            .catch(function () {
+                if (submitBtn) {
+                    submitBtn.disabled = false;
+                    submitBtn.style.opacity = '1';
+                }
+                form.submit();
+            });
+        });
 
         if (document.readyState === 'loading') {
             document.addEventListener('DOMContentLoaded', setupAutoDismissAlerts);

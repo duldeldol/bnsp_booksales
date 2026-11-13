@@ -20,7 +20,7 @@ class DashboardController extends Controller
         $totalRevenue = Order::whereIn('status', ['paid', 'completed'])->sum('total_amount');
         $unreadMessages = Contact::where('is_read', false)->count();
 
-        $recentOrders = Order::with('user')->latest()->take(2)->get();
+        $recentOrders = Order::with('user')->latest()->take(3)->get();
         $recentBooks = Book::with('category')->latest()->take(2)->get();
         $categoriesList = Category::withCount('books')->latest()->take(4)->get();
 

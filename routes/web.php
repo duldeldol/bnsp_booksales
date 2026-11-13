@@ -7,6 +7,8 @@ use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\OrderController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Auth\AuthController;
+use App\Http\Controllers\CartController;
+use App\Http\Controllers\CheckoutController;
 use App\Http\Controllers\HomeController;
 use Illuminate\Support\Facades\Route;
 
@@ -32,6 +34,26 @@ Route::middleware('guest')->group(function () {
 });
 
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout')->middleware('auth');
+
+// Keranjang Belanja & Checkout (Transaksi Pelanggan)
+Route::post('/cart/add/{book}', [CartController::class, 'add'])->name('cart.add');
+
+Route::middleware('auth')->group(function () {
+    // 1. Keranjang Belanja
+    Route::get('/cart', [CartController::class, 'index'])->name('cart.index');
+    Route::patch('/cart/{id}', [CartController::class, 'update'])->name('cart.update');
+    Route::delete('/cart/{id}', [CartController::class, 'destroy'])->name('cart.destroy');
+    Route::delete('/cart', [CartController::class, 'clear'])->name('cart.clear');
+
+    // 2. Checkout Pesanan (Bayar di Tempat - COD)
+    Route::get('/checkout', [CheckoutController::class, 'index'])->name('checkout.index');
+    Route::post('/checkout', [CheckoutController::class, 'store'])->name('checkout.store');
+
+    // 3. Nota Konfirmasi & Riwayat Pesanan Saya
+    Route::get('/orders/success/{order_number}', [CheckoutController::class, 'success'])->name('orders.success');
+    Route::get('/my-orders', [CheckoutController::class, 'myOrders'])->name('orders.my');
+    Route::get('/my-orders/{order_number}', [CheckoutController::class, 'showOrder'])->name('orders.detail');
+});
 
 // Panel Administrasi (Khusus Role: Admin)
 Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(function () {

@@ -70,12 +70,32 @@
 
                 <div class="mb-3">
                     <label class="form-label small text-muted">Pilih status terkini:</label>
-                    <select name="status" class="form-select form-select-sm">
-                        <option value="pending" {{ $order->status === 'pending' ? 'selected' : '' }}>Menunggu Pembayaran</option>
-                        <option value="paid" {{ $order->status === 'paid' ? 'selected' : '' }}>Lunas / Diproses</option>
-                        <option value="completed" {{ $order->status === 'completed' ? 'selected' : '' }}>Selesai</option>
-                        <option value="cancelled" {{ $order->status === 'cancelled' ? 'selected' : '' }}>Dibatalkan</option>
-                    </select>
+                    <div class="dropdown admin-custom-dropdown w-100">
+                        @php
+                            $statusMap = [
+                                'pending' => 'Menunggu Pembayaran',
+                                'paid' => 'Lunas / Diproses',
+                                'completed' => 'Selesai',
+                                'cancelled' => 'Dibatalkan',
+                            ];
+                        @endphp
+                        <button class="btn btn-sm form-select form-select-sm text-start d-flex align-items-center justify-content-between w-100" type="button" data-bs-toggle="dropdown" aria-expanded="false" id="orderStatusDropdownBtn">
+                            <span id="orderStatusSelectedLabel">{{ $statusMap[$order->status] ?? 'Pilih Status' }}</span>
+                        </button>
+                        <ul class="dropdown-menu w-100 shadow-sm border mt-1" style="border-radius: 10px; border-color: var(--border-color) !important;">
+                            @foreach($statusMap as $sVal => $sText)
+                                <li>
+                                    <button type="button" class="dropdown-item small py-2 d-flex align-items-center justify-content-between {{ $order->status === $sVal ? 'active' : '' }}" onclick="document.getElementById('orderStatusInput').value = '{{ $sVal }}'; document.getElementById('orderStatusSelectedLabel').textContent = '{{ $sText }}'; this.closest('.dropdown').querySelectorAll('.dropdown-item').forEach(el => el.classList.remove('active')); this.classList.add('active');">
+                                        <span>{{ $sText }}</span>
+                                        @if($order->status === $sVal)
+                                            <i class="bi bi-check2"></i>
+                                        @endif
+                                    </button>
+                                </li>
+                            @endforeach
+                        </ul>
+                        <input type="hidden" name="status" id="orderStatusInput" value="{{ $order->status }}">
+                    </div>
                 </div>
 
                 <button type="submit" class="btn btn-shadcn-primary w-100 btn-sm">

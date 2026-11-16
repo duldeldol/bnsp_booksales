@@ -25,8 +25,81 @@
                             </button>
                         </div>
 
-                        <!-- Scrollable Table Container -->
-                        <div class="table-responsive" style="max-height: 245px; overflow-y: auto; overflow-x: auto;">
+                        <!-- Mobile Cart Items List -->
+                        <div class="d-md-none d-flex flex-column gap-3 mb-3">
+                            @foreach($cartItems as $item)
+                                <div class="p-3 rounded-3 border bg-white shadow-xs">
+                                    <div class="d-flex gap-3 mb-2">
+                                        <!-- Thumbnail -->
+                                        <div class="rounded-2 overflow-hidden shadow-sm flex-shrink-0" style="width: 58px; height: 82px; background: #ede6db;">
+                                            <img src="{{ $item->book ? $item->book->cover_url : '' }}" alt="{{ $item->book ? $item->book->title : 'Buku' }}" class="w-100 h-100" style="object-fit: cover;">
+                                        </div>
+                                        <!-- Meta -->
+                                        <div class="flex-grow-1 min-w-0" style="min-width: 0;">
+                                            <div class="boutique-tag" style="font-size: 0.65rem; margin-bottom: 2px;">
+                                                {{ $item->book && $item->book->category ? $item->book->category->name : 'Kategori' }}
+                                            </div>
+                                            <h6 class="font-serif-book fw-bold text-dark mb-1 text-truncate" style="font-size: 0.92rem; line-height: 1.3;">
+                                                {{ $item->book ? $item->book->title : 'Buku tidak ditemukan' }}
+                                            </h6>
+                                            <div class="text-muted small text-truncate" style="font-size: 0.75rem;">
+                                                Penulis: {{ $item->book ? $item->book->author : '-' }}
+                                            </div>
+                                            <div class="fw-bold text-dark font-serif-book mt-1" style="font-size: 0.92rem;">
+                                                {{ $item->book ? $item->book->formatted_price : '-' }}
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Bottom Row: Stepper & Subtotal -->
+                                    <div class="d-flex align-items-center justify-content-between pt-2 border-top" style="border-color: #f6f1e8 !important;">
+                                        <!-- Stepper -->
+                                        <div class="d-inline-flex align-items-center border rounded-pill bg-light p-1" style="border-color: var(--border-medium) !important;">
+                                            <form action="{{ route('cart.update', $item->id) }}" method="POST" class="d-inline m-0">
+                                                @csrf
+                                                @method('PATCH')
+                                                <input type="hidden" name="action" value="decrease">
+                                                <button type="submit" class="btn btn-sm btn-link text-dark p-0 d-flex align-items-center justify-content-center" style="width: 26px; height: 26px; text-decoration: none;" title="{{ $item->quantity == 1 ? 'Hapus item' : 'Kurang 1' }}">
+                                                    <i class="bi {{ $item->quantity == 1 ? 'bi-trash text-danger' : 'bi-dash' }}" style="font-size: 0.85rem;"></i>
+                                                </button>
+                                            </form>
+
+                                            <span class="fw-bold px-2 text-dark font-monospace" style="font-size: 0.88rem; min-width: 26px; text-align: center;">
+                                                {{ $item->quantity }}
+                                            </span>
+
+                                            <form action="{{ route('cart.update', $item->id) }}" method="POST" class="d-inline m-0">
+                                                @csrf
+                                                @method('PATCH')
+                                                <input type="hidden" name="action" value="increase">
+                                                <button type="submit" class="btn btn-sm btn-link text-dark p-0 d-flex align-items-center justify-content-center" style="width: 26px; height: 26px; text-decoration: none;" title="Tambah 1" {{ ($item->book && $item->quantity >= $item->book->stock) ? 'disabled' : '' }}>
+                                                    <i class="bi bi-plus" style="font-size: 0.85rem;"></i>
+                                                </button>
+                                            </form>
+                                        </div>
+
+                                        <!-- Subtotal & Trash -->
+                                        <div class="d-flex align-items-center gap-2.5">
+                                            <div class="text-end">
+                                                <span class="fw-bold text-dark font-serif-book" style="font-size: 0.95rem;">
+                                                    Rp {{ number_format($item->subtotal, 0, ',', '.') }}
+                                                </span>
+                                            </div>
+                                            <form action="{{ route('cart.destroy', $item->id) }}" method="POST" class="m-0">
+                                                @csrf
+                                                @method('DELETE')
+                                                <button type="submit" class="btn btn-sm text-danger p-1 border-0 bg-transparent" title="Hapus dari keranjang">
+                                                    <i class="bi bi-trash3" style="font-size: 0.9rem;"></i>
+                                                </button>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            @endforeach
+                        </div>
+
+                        <!-- Desktop Scrollable Table Container -->
+                        <div class="table-responsive d-none d-md-block" style="max-height: 245px; overflow-y: auto; overflow-x: auto;">
                             <table class="table align-middle mb-0">
                                 <thead style="position: sticky; top: 0; background-color: #ffffff; z-index: 2;">
                                     <tr class="text-muted small text-uppercase" style="font-size: 0.75rem; letter-spacing: 0.05em; border-bottom: 1px solid var(--border-subtle);">

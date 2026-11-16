@@ -34,6 +34,17 @@
             </p>
         </div>
 
+        @php
+            $waPhone = '6285173350405';
+            $waText = "Halo Admin BookStore,\n\nSaya ingin konfirmasi pembayaran untuk pesanan:\n"
+                . "• No. Pesanan: " . $order->order_number . "\n"
+                . "• Nama: " . $order->customer_name . "\n"
+                . "• Total Tagihan: " . $order->formatted_total . "\n"
+                . "• Tanggal: " . $order->created_at->format('d/m/Y H:i') . " WIB\n\n"
+                . "Mohon info nomor rekening transfernya ya min. Terima kasih!";
+            $waUrl = 'https://wa.me/' . $waPhone . '?text=' . rawurlencode($waText);
+        @endphp
+
         <!-- Printable Invoice Container -->
         <div class="bg-white rounded-3 border p-4 p-md-5 shadow-sm mb-4" id="printableInvoice" style="border-color: var(--border-subtle) !important;">
 
@@ -75,6 +86,24 @@
                     @if($order->payment_method === 'cod')
                         <div class="p-2 rounded bg-light border text-success small mt-2" style="font-size: 0.78rem;">
                             <i class="bi bi-truck me-1"></i> Siapkan uang saat kurir tiba di alamat Anda.
+                        </div>
+                    @endif
+
+                    @if($order->payment_method === 'whatsapp' && $order->status === 'pending')
+                        <!-- WhatsApp Confirmation Box -->
+                        <div class="p-3 rounded-3 mt-2.5 no-print" style="background-color: #f7faf7;">
+                            <div class="mb-1 text-success fw-bold" style="font-size: 0.8rem;">
+                                Konfirmasi via WhatsApp
+                            </div>
+                            <div class="text-muted small mb-2.5" style="font-size: 0.76rem; line-height: 1.45;">
+                                Hubungi CS info rekening transfer resmi:<br>
+                                <span class="fw-semibold text-dark text-nowrap">+62 851-7335-0405</span>
+                            </div>
+                            <a href="{{ $waUrl }}" target="_blank" rel="noopener noreferrer"
+                               class="btn btn-sm btn-success px-3 py-1.5 rounded-pill fw-semibold d-inline-block text-nowrap shadow-sm"
+                               style="background-color: #25d366; border: none; font-size: 0.76rem;">
+                                Chat WhatsApp
+                            </a>
                         </div>
                     @endif
                 </div>

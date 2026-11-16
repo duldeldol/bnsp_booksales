@@ -112,6 +112,23 @@
         color: #ffffff;
         border-color: var(--color-ink);
     }
+
+    @media (max-width: 575.98px) {
+        .catalog-header-haven {
+            padding: 2.25rem 0 1.25rem 0;
+        }
+        .catalog-title {
+            font-size: 1.95rem;
+        }
+        .catalog-subtitle {
+            font-size: 0.88rem;
+            margin-bottom: 1.25rem;
+        }
+        .catalog-search-input {
+            padding: 0.65rem 2.4rem;
+            font-size: 0.85rem;
+        }
+    }
 </style>
 @endpush
 
@@ -196,7 +213,7 @@
                                 <span class="boutique-price">
                                     {{ $book->formatted_price }}
                                 </span>
-                                <div class="d-flex align-items-center" style="gap: 9px;">
+                                <div class="boutique-actions d-flex align-items-center" style="gap: 8px;">
                                     <button type="button" class="btn-boutique-action" data-bs-toggle="modal" data-bs-target="#modalBookDetail{{ $book->id }}">
                                         Detail
                                     </button>
@@ -217,13 +234,15 @@
             @if($books->total() > 0)
                 <div class="mt-5 pt-4 border-top" style="border-color: var(--border-subtle) !important;">
                     <div class="row align-items-center w-100 g-0" style="margin: 0;">
-                        <div class="col-12 col-md-4 text-center text-md-start p-0">
-                            <span class="text-muted" style="font-size: 0.82rem; letter-spacing: 0.01em; line-height: 1.5;">
+                        {{-- Kiri di Desktop, Bawah di Mobile --}}
+                        <div class="col-12 col-md-4 text-center text-md-start p-0 order-2 order-md-1 mt-2 mt-md-0">
+                            <span class="text-muted" style="font-size: 0.75rem; letter-spacing: 0.01em; line-height: 1.5;">
                                 Menampilkan <strong class="text-dark">{{ $books->firstItem() ?? 0 }}</strong> – <strong class="text-dark">{{ $books->lastItem() ?? 0 }}</strong> dari <strong class="text-dark">{{ $books->total() }}</strong> buku
                             </span>
                         </div>
 
-                        <div class="col-12 col-md-4 d-flex justify-content-center p-0 my-2 my-md-0">
+                        {{-- Navigasi Halaman: Atas di Mobile, Tengah di Desktop --}}
+                        <div class="col-12 col-md-4 d-flex justify-content-center p-0 my-1 my-md-0 order-1 order-md-2">
                             @if($books->hasPages())
                                 <nav aria-label="Navigasi Halaman Katalog">
                                     <ul class="pagination pagination-sm mb-0" style="gap: 4px;">
@@ -266,7 +285,7 @@
                             @endif
                         </div>
 
-                        <div class="col-12 col-md-4 text-center text-md-end d-none d-md-block p-0">
+                        <div class="col-12 col-md-4 text-center text-md-end d-none d-md-block p-0 order-md-3">
                             @if($books->hasPages())
                                 <span class="text-muted" style="font-size: 0.82rem; line-height: 1.5;">
                                     Halaman <strong class="text-dark">{{ $books->currentPage() }}</strong> dari <strong class="text-dark">{{ $books->lastPage() }}</strong>

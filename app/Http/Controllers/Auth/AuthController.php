@@ -36,12 +36,10 @@ class AuthController extends Controller
             $request->session()->regenerate();
 
             if (Auth::user()->role === 'admin') {
-                return redirect()->intended(route('admin.dashboard'))
-                    ->with('success', 'Selamat datang kembali, Administrator!');
+                return redirect()->intended(route('admin.dashboard'));
             }
 
-            return redirect()->intended(route('home'))
-                ->with('success', 'Berhasil login! Selamat berbelanja.');
+            return redirect()->intended(route('home'));
         }
 
         return back()->withErrors([
@@ -83,8 +81,7 @@ class AuthController extends Controller
         Auth::login($user);
         $request->session()->regenerate();
 
-        return redirect()->route('home')
-            ->with('success', 'Registrasi berhasil! Selamat datang di BookStore.');
+        return redirect()->route('home');
     }
 
     public function logout(Request $request)
@@ -93,7 +90,6 @@ class AuthController extends Controller
         $request->session()->invalidate();
         $request->session()->regenerateToken();
 
-        return redirect()->route('login')
-            ->with('success', 'Anda telah berhasil logout.');
+        return redirect()->route('login');
     }
 }

@@ -17,7 +17,7 @@
 <!-- Search & Filter Card -->
 <div class="shadcn-card mb-4">
     <div class="p-3">
-        <form action="{{ route('admin.categories.index') }}" method="GET" class="row g-2 align-items-center">
+        <form action="{{ route('admin.categories.index') }}" method="GET" class="row g-2 align-items-center admin-filter-form">
             <div class="col-md-6">
                 <div class="input-group input-group-sm">
                     <span class="input-group-text bg-white border-end-0 text-muted"><i class="bi bi-search"></i></span>
@@ -25,12 +25,40 @@
                 </div>
             </div>
             <div class="col-md-3">
-                <select name="filter" class="form-select form-select-sm" onchange="this.form.submit()">
-                    <option value="">Semua Kategori</option>
-                    <option value="has_books" {{ request('filter') == 'has_books' ? 'selected' : '' }}>Ada Koleksi Buku</option>
-                    <option value="empty" {{ request('filter') == 'empty' ? 'selected' : '' }}>Kategori Kosong (0 Buku)</option>
-                    <option value="most_books" {{ request('filter') == 'most_books' ? 'selected' : '' }}>Koleksi Terbanyak</option>
-                </select>
+                <div class="dropdown admin-custom-dropdown w-100">
+                    @php
+                        $filterOptions = [
+                            'has_books' => 'Ada Koleksi Buku',
+                            'empty' => 'Kategori Kosong (0 Buku)',
+                            'most_books' => 'Koleksi Terbanyak',
+                        ];
+                        $selectedLabel = $filterOptions[request('filter')] ?? 'Semua Kategori';
+                    @endphp
+                    <button class="btn btn-sm form-select form-select-sm text-start d-flex align-items-center justify-content-between w-100" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        <span class="text-truncate">{{ $selectedLabel }}</span>
+                    </button>
+                    <ul class="dropdown-menu w-100 shadow-sm border mt-1" style="border-radius: 10px; border-color: var(--border-color) !important;">
+                        <li>
+                            <button type="button" class="dropdown-item small py-2 d-flex align-items-center justify-content-between {{ !request('filter') ? 'active' : '' }}" onclick="submitAdminFilter(this, '')">
+                                <span>Semua Kategori</span>
+                                @if(!request('filter'))
+                                    <i class="bi bi-check2"></i>
+                                @endif
+                            </button>
+                        </li>
+                        @foreach($filterOptions as $val => $lbl)
+                            <li>
+                                <button type="button" class="dropdown-item small py-2 d-flex align-items-center justify-content-between {{ request('filter') == $val ? 'active' : '' }}" onclick="submitAdminFilter(this, '{{ $val }}')">
+                                    <span class="text-truncate">{{ $lbl }}</span>
+                                    @if(request('filter') == $val)
+                                        <i class="bi bi-check2"></i>
+                                    @endif
+                                </button>
+                            </li>
+                        @endforeach
+                    </ul>
+                    <input type="hidden" name="filter" value="{{ request('filter') }}">
+                </div>
             </div>
             <div class="col-md-3 d-flex gap-2">
                 <button type="submit" class="btn btn-shadcn-primary btn-sm w-100 d-inline-flex align-items-center justify-content-center">Cari

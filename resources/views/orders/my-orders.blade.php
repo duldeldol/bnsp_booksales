@@ -24,7 +24,7 @@
                                 <th class="py-3 text-center text-muted text-uppercase" style="letter-spacing: 0.05em;">Metode</th>
                                 <th class="py-3 text-center text-muted text-uppercase" style="letter-spacing: 0.05em;">Status</th>
                                 <th class="py-3 text-end text-muted text-uppercase" style="letter-spacing: 0.05em;">Total Bayar</th>
-                                <th class="pe-4 py-3 text-center text-muted text-uppercase" style="width: 110px; letter-spacing: 0.05em;">Aksi</th>
+                                <th class="pe-4 py-3 text-center text-muted text-uppercase" style="width: 170px; letter-spacing: 0.05em;">Aksi</th>
                             </tr>
                         </thead>
                         <tbody style="font-size: 0.88rem;">
@@ -61,10 +61,22 @@
                                     <td class="py-3 text-end fw-bold text-dark font-serif-book text-nowrap" style="font-size: 0.95rem; white-space: nowrap !important;">
                                         {{ $order->formatted_total }}
                                     </td>
-                                    <td class="pe-4 py-3 text-center">
-                                        <a href="{{ route('orders.success', $order->order_number) }}" class="btn btn-sm btn-book-outline py-1 px-2.5" style="font-size: 0.78rem;">
-                                            <i class="bi bi-receipt me-1"></i> Nota
-                                        </a>
+                                    <td class="pe-4 py-3 text-center text-nowrap">
+                                        <div class="d-inline-flex align-items-center justify-content-center gap-2">
+                                            <a href="{{ route('orders.success', $order->order_number) }}" class="btn btn-sm btn-book-outline py-1 px-2.5 rounded-pill" style="font-size: 0.78rem;">
+                                                <i class="bi bi-receipt me-1"></i> Nota
+                                            </a>
+                                            @if($order->payment_method === 'whatsapp' && $order->status === 'pending')
+                                                @php
+                                                    $waPhone = '6285173350405';
+                                                    $waText = "Halo Admin BookStore, saya ingin konfirmasi pembayaran untuk pesanan: " . $order->order_number . " atas nama " . $order->customer_name . " (Total: " . $order->formatted_total . "). Terima kasih!";
+                                                    $waUrl = 'https://wa.me/' . $waPhone . '?text=' . rawurlencode($waText);
+                                                @endphp
+                                                <a href="{{ $waUrl }}" target="_blank" rel="noopener noreferrer" class="btn btn-sm btn-outline-success py-1 px-2.5 rounded-pill d-inline-flex align-items-center gap-1" style="font-size: 0.78rem;">
+                                                    <i class="bi bi-whatsapp"></i> Chat WA
+                                                </a>
+                                            @endif
+                                        </div>
                                     </td>
                                 </tr>
                             @endforeach

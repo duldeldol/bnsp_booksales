@@ -30,15 +30,31 @@
 
                         <div class="col-md-4 mb-3">
                             <label class="form-label small fw-semibold text-dark">Kategori <span class="text-danger">*</span></label>
-                            <select name="category_id" class="form-select @error('category_id') is-invalid @enderror" required>
-                                @foreach($categories as $cat)
-                                    <option value="{{ $cat->id }}" {{ old('category_id', $book->category_id) == $cat->id ? 'selected' : '' }}>
-                                        {{ $cat->name }}
-                                    </option>
-                                @endforeach
-                            </select>
+                            <div class="dropdown admin-custom-dropdown w-100">
+                                @php
+                                    $currCatId = old('category_id', $book->category_id);
+                                    $selectedCat = $categories->firstWhere('id', $currCatId);
+                                    $catText = $selectedCat ? $selectedCat->name : '-- Pilih Kategori --';
+                                @endphp
+                                <button class="btn btn-sm form-select text-start d-flex align-items-center justify-content-between w-100 @error('category_id') is-invalid @enderror" type="button" data-bs-toggle="dropdown" aria-expanded="false" id="bookCatDropdownBtn">
+                                    <span id="bookCatSelectedLabel" class="text-truncate">{{ $catText }}</span>
+                                </button>
+                                <ul class="dropdown-menu w-100 shadow-sm border mt-1" style="max-height: 250px; overflow-y: auto; border-radius: 10px; border-color: var(--border-color) !important;">
+                                    @foreach($categories as $cat)
+                                        <li>
+                                            <button type="button" class="dropdown-item small py-2 d-flex align-items-center justify-content-between {{ $currCatId == $cat->id ? 'active' : '' }}" onclick="document.getElementById('category_id_input').value = '{{ $cat->id }}'; document.getElementById('bookCatSelectedLabel').textContent = '{{ $cat->name }}'; this.closest('.dropdown').querySelectorAll('.dropdown-item').forEach(el => el.classList.remove('active')); this.classList.add('active');">
+                                                <span class="text-truncate">{{ $cat->name }}</span>
+                                                @if($currCatId == $cat->id)
+                                                    <i class="bi bi-check2"></i>
+                                                @endif
+                                            </button>
+                                        </li>
+                                    @endforeach
+                                </ul>
+                                <input type="hidden" name="category_id" id="category_id_input" value="{{ $currCatId }}" required>
+                            </div>
                             @error('category_id')
-                                <div class="invalid-feedback">{{ $message }}</div>
+                                <div class="invalid-feedback d-block">{{ $message }}</div>
                             @enderror
                         </div>
                     </div>

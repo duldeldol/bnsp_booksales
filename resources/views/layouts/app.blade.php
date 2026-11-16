@@ -27,6 +27,10 @@
             --text-muted: #78716c;
         }
 
+        html {
+            overflow-x: clip;
+        }
+
         body {
             font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
             background-color: var(--bg-canvas);
@@ -36,6 +40,7 @@
             flex-direction: column;
             margin: 0;
             -webkit-font-smoothing: antialiased;
+            overflow-x: clip;
         }
 
         .font-serif-book {
@@ -43,13 +48,15 @@
         }
 
         .store-navbar {
-            background-color: var(--bg-canvas);
+            background-color: rgba(250, 247, 242, 0.96);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
             border-bottom: 1px solid var(--border-subtle);
             position: sticky;
             top: 0;
             z-index: 1040;
             padding: 1.1rem 0;
-            transition: background-color 0.2s ease;
+            transition: background-color 0.2s ease, box-shadow 0.2s ease;
         }
 
         @keyframes badgeBounce {
@@ -277,6 +284,122 @@
             color: #ffffff;
         }
 
+        .boutique-actions {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        /* Mobile Bottom Floating Dock */
+        .mobile-bottom-dock {
+            position: fixed;
+            bottom: 18px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 1040;
+            pointer-events: none;
+            margin: 0;
+            width: max-content;
+        }
+        .dock-container {
+            pointer-events: auto;
+            background-color: #1c1917;
+            border: 1px solid rgba(224, 215, 199, 0.2);
+            border-radius: 50px;
+            padding: 5px 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            width: 252px;
+            box-shadow: none;
+            backdrop-filter: blur(14px);
+            -webkit-backdrop-filter: blur(14px);
+            box-sizing: border-box;
+        }
+        .dock-item {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-decoration: none;
+            -webkit-tap-highlight-color: transparent;
+        }
+        .dock-icon-wrap {
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #d6cebf;
+            font-size: 1.22rem;
+            transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+            box-sizing: border-box;
+        }
+        .dock-item:hover .dock-icon-wrap {
+            color: #ffffff;
+            background-color: rgba(255, 255, 255, 0.08);
+        }
+        .dock-item.active .dock-icon-wrap {
+            background-color: var(--color-amber);
+            color: #ffffff;
+            box-shadow: 0 4px 14px rgba(180, 83, 9, 0.42);
+        }
+
+        @media (max-width: 991.98px) {
+            .store-footer {
+                padding-bottom: calc(2.5rem + 72px) !important;
+            }
+            .store-navbar {
+                padding: 0.85rem 0;
+            }
+        }
+
+        @media (max-width: 575.98px) {
+            .boutique-card {
+                padding: 0.75rem;
+                border-radius: 12px;
+            }
+            .boutique-cover-wrap {
+                border-radius: 6px;
+                margin-bottom: 0.65rem;
+            }
+            .boutique-tag {
+                font-size: 0.65rem;
+                margin-bottom: 0.15rem;
+            }
+            .boutique-title {
+                font-size: 0.88rem;
+                height: 2.5em;
+                margin-bottom: 0.2rem;
+            }
+            .boutique-author {
+                font-size: 0.74rem;
+                margin-bottom: 0.75rem;
+            }
+            .boutique-bottom-row {
+                flex-direction: column;
+                align-items: stretch;
+                gap: 0.5rem;
+                padding-top: 0.65rem;
+            }
+            .boutique-price {
+                font-size: 0.95rem;
+                text-align: left;
+            }
+            .boutique-actions {
+                width: 100%;
+                gap: 6px;
+            }
+            .boutique-actions .btn-boutique-action {
+                flex: 1;
+                text-align: center;
+                padding: 0.35rem 0.5rem;
+                font-size: 0.76rem;
+            }
+        }
+
         .form-control:focus, .form-select:focus {
             border-color: var(--color-amber) !important;
             box-shadow: 0 0 0 3px rgba(180, 83, 9, 0.12) !important;
@@ -470,104 +593,119 @@
 
     <!-- Storefront Header / Navbar -->
     <nav class="navbar navbar-expand-lg store-navbar">
-        <div class="container">
+        <div class="container d-flex align-items-center justify-content-between">
             <!-- Brand Text Logo -->
             <a class="brand-logo-text" href="{{ route('home') }}">
                 BookStore<span class="brand-dot">.</span>
             </a>
 
-            <!-- Mobile Toggle -->
-            <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navContent" aria-label="Menu">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-
-            <!-- Nav Links & User Area -->
-            <div class="collapse navbar-collapse" id="navContent">
-                <ul class="navbar-nav mx-auto mb-2 mb-lg-0 gap-1">
-                    <li class="nav-item">
-                        <a class="nav-link-pure {{ request()->routeIs('home') ? 'active' : '' }}" href="{{ route('home') }}">
-                            Beranda
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link-pure {{ request()->routeIs('catalog') ? 'active' : '' }}" href="{{ route('catalog') }}">
-                            Katalog Buku
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link-pure {{ request()->routeIs('about') ? 'active' : '' }}" href="{{ route('about') }}">
-                            Tentang Kami
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link-pure {{ request()->routeIs('contact') ? 'active' : '' }}" href="{{ route('contact') }}">
-                            Kontak
-                        </a>
-                    </li>
-                </ul>
-
-                <div class="d-flex align-items-center gap-2">
-                    <!-- Cart Button -->
-                    <a href="{{ route('cart.index') }}" id="navbarCartLink" class="btn btn-sm btn-book-outline position-relative d-inline-flex align-items-center gap-1 px-3 py-1.5 {{ request()->routeIs('cart.*') ? 'active' : '' }}" title="Keranjang Belanja">
-                        <i class="bi bi-cart3 fs-6"></i>
-                        <span class="d-none d-md-inline fw-semibold ms-1">Keranjang</span>
-                        <span id="navbarCartBadge" class="badge rounded-pill bg-dark text-white ms-1" style="font-size: 0.65rem; padding: 0.2em 0.45em; line-height: 1; letter-spacing: 0; {{ (isset($cartCount) && $cartCount > 0) ? '' : 'display: none;' }}">
-                            {{ $cartCount ?? 0 }}
-                        </span>
+            <!-- Desktop Nav Links (Hidden on Mobile) -->
+            <ul class="navbar-nav d-none d-lg-flex flex-row align-items-center gap-1 mb-0">
+                <li class="nav-item">
+                    <a class="nav-link-pure {{ request()->routeIs('home') ? 'active' : '' }}" href="{{ route('home') }}">
+                        Beranda
                     </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link-pure {{ request()->routeIs('catalog') ? 'active' : '' }}" href="{{ route('catalog') }}">
+                        Katalog Buku
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link-pure {{ request()->routeIs('about') ? 'active' : '' }}" href="{{ route('about') }}">
+                        Tentang Kami
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link-pure {{ request()->routeIs('contact') ? 'active' : '' }}" href="{{ route('contact') }}">
+                        Kontak
+                    </a>
+                </li>
+            </ul>
 
-                    @auth
-                        <!-- Customer User Dropdown -->
-                        <div class="dropdown">
-                            <button class="btn btn-sm btn-book-outline dropdown-toggle d-flex align-items-center gap-2" type="button" data-bs-toggle="dropdown">
-                                <div class="rounded-circle bg-dark text-white d-flex align-items-center justify-content-center" style="width: 22px; height: 22px; font-size: 0.72rem;">
-                                    {{ strtoupper(substr(auth()->user()->name, 0, 1)) }}
-                                </div>
-                                <span class="fw-semibold text-truncate" style="max-width: 120px;">{{ auth()->user()->name }}</span>
-                            </button>
-                            <ul class="dropdown-menu dropdown-menu-end shadow-sm border mt-2" style="border-radius: 12px; border-color: var(--border-subtle) !important;">
-                                <li class="px-3 py-2 border-bottom" style="border-color: var(--border-subtle) !important;">
-                                    <div class="small fw-bold text-dark">{{ auth()->user()->name }}</div>
-                                    <div class="small text-muted text-truncate">{{ auth()->user()->email }}</div>
-                                </li>
-                                <li>
-                                    <a class="dropdown-item small py-2" href="{{ route('orders.my') }}">
-                                        <i class="bi bi-bag-check me-2 text-warning"></i> Pesanan Saya
-                                    </a>
-                                </li>
-                                @if(auth()->user()->role === 'admin')
-                                    <li>
-                                        <hr class="dropdown-divider my-1">
-                                    </li>
-                                    <li>
-                                        <a class="dropdown-item small py-2" href="{{ route('admin.dashboard') }}">
-                                            <i class="bi bi-speedometer2 me-2 text-primary"></i> Dashboard Admin
-                                        </a>
-                                    </li>
-                                @endif
+            <!-- Right Area: Cart & Profile Icons -->
+            <div class="d-flex align-items-center gap-2">
+                <!-- Cart Button -->
+                <a href="{{ route('cart.index') }}" id="navbarCartLink" class="btn btn-sm btn-book-outline position-relative d-inline-flex align-items-center justify-content-center gap-1 px-2.5 px-lg-3 py-1.5 {{ request()->routeIs('cart.*') ? 'active' : '' }}" title="Keranjang Belanja" style="border-radius: 50px;">
+                    <i class="bi bi-cart3 fs-6"></i>
+                    <span class="d-none d-lg-inline fw-semibold ms-1">Keranjang</span>
+                    <span id="navbarCartBadge" class="badge rounded-pill bg-dark text-white ms-0.5 ms-lg-1" style="font-size: 0.65rem; padding: 0.2em 0.45em; line-height: 1; letter-spacing: 0; {{ (isset($cartCount) && $cartCount > 0) ? '' : 'display: none;' }}">
+                        {{ $cartCount ?? 0 }}
+                    </span>
+                </a>
+
+                @auth
+                    <!-- Customer User Profile Dropdown -->
+                    <div class="dropdown">
+                        <button class="btn btn-sm btn-book-outline dropdown-toggle d-flex align-items-center gap-2 px-2 px-lg-3 py-1.5" type="button" data-bs-toggle="dropdown" aria-label="Menu Akun" style="border-radius: 50px;">
+                            <div class="rounded-circle bg-dark text-white d-flex align-items-center justify-content-center flex-shrink-0" style="width: 22px; height: 22px; font-size: 0.72rem;">
+                                {{ strtoupper(substr(auth()->user()->name, 0, 1)) }}
+                            </div>
+                            <span class="fw-semibold text-truncate d-none d-lg-inline" style="max-width: 120px;">{{ auth()->user()->name }}</span>
+                        </button>
+                        <ul class="dropdown-menu dropdown-menu-end shadow-sm border mt-2" style="border-radius: 12px; border-color: var(--border-subtle) !important;">
+                            <li class="px-3 py-2 border-bottom" style="border-color: var(--border-subtle) !important;">
+                                <div class="small fw-bold text-dark">{{ auth()->user()->name }}</div>
+                                <div class="small text-muted text-truncate">{{ auth()->user()->email }}</div>
+                            </li>
+                            <li>
+                                <a class="dropdown-item small py-2" href="{{ route('orders.my') }}">
+                                    <i class="bi bi-bag-check me-2 text-warning"></i> Pesanan Saya
+                                </a>
+                            </li>
+                            @if(auth()->user()->role === 'admin')
                                 <li>
                                     <hr class="dropdown-divider my-1">
                                 </li>
                                 <li>
-                                    <form action="{{ route('logout') }}" method="POST">
-                                        @csrf
-                                        <button type="submit" class="dropdown-item small text-danger py-2">
-                                            <i class="bi bi-box-arrow-right me-2"></i> Keluar
-                                        </button>
-                                    </form>
+                                    <a class="dropdown-item small py-2" href="{{ route('admin.dashboard') }}">
+                                        <i class="bi bi-speedometer2 me-2 text-primary"></i> Dashboard Admin
+                                    </a>
                                 </li>
-                            </ul>
-                        </div>
-                    @else
-                        <!-- Guest Auth Buttons -->
+                            @endif
+                            <li>
+                                <hr class="dropdown-divider my-1">
+                            </li>
+                            <li>
+                                <form action="{{ route('logout') }}" method="POST">
+                                    @csrf
+                                    <button type="submit" class="dropdown-item small text-danger py-2">
+                                        <i class="bi bi-box-arrow-right me-2"></i> Keluar
+                                    </button>
+                                </form>
+                            </li>
+                        </ul>
+                    </div>
+                @else
+                    <!-- Guest View -->
+                    <!-- Desktop: Masuk & Daftar buttons -->
+                    <div class="d-none d-lg-flex align-items-center gap-2">
                         <a href="{{ route('login') }}" class="btn btn-book-outline">
                             Masuk
                         </a>
                         <a href="{{ route('register') }}" class="btn btn-book-primary">
                             Daftar
                         </a>
-                    @endauth
-                </div>
+                    </div>
+                    <!-- Mobile: Profile Icon Button with Dropdown -->
+                    <div class="dropdown d-lg-none">
+                        <button class="btn btn-sm btn-book-outline d-flex align-items-center justify-content-center p-0" type="button" data-bs-toggle="dropdown" aria-label="Menu Akun" style="width: 34px; height: 34px; border-radius: 50%;">
+                            <i class="bi bi-person fs-5"></i>
+                        </button>
+                        <ul class="dropdown-menu dropdown-menu-end shadow-sm border mt-2" style="border-radius: 12px; border-color: var(--border-subtle) !important;">
+                            <li>
+                                <a class="dropdown-item small py-2" href="{{ route('login') }}">
+                                    <i class="bi bi-box-arrow-in-right me-2 text-primary"></i> Masuk
+                                </a>
+                            </li>
+                            <li>
+                                <a class="dropdown-item small py-2" href="{{ route('register') }}">
+                                    <i class="bi bi-person-plus me-2 text-success"></i> Buat Akun Baru
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                @endauth
             </div>
         </div>
     </nav>
@@ -576,6 +714,32 @@
     <main class="flex-grow-1">
         @yield('content')
     </main>
+
+    <!-- Floating Bottom Navigation Dock (Mobile Only) -->
+    <nav class="mobile-bottom-dock d-lg-none" aria-label="Navigasi Bawah">
+        <div class="dock-container">
+            <a href="{{ route('home') }}" class="dock-item {{ request()->routeIs('home') ? 'active' : '' }}" title="Beranda">
+                <div class="dock-icon-wrap">
+                    <i class="bi {{ request()->routeIs('home') ? 'bi-house-door-fill' : 'bi-house-door' }}"></i>
+                </div>
+            </a>
+            <a href="{{ route('catalog') }}" class="dock-item {{ request()->routeIs('catalog') ? 'active' : '' }}" title="Katalog Buku">
+                <div class="dock-icon-wrap">
+                    <i class="bi {{ request()->routeIs('catalog') ? 'bi-book-half' : 'bi-book' }}"></i>
+                </div>
+            </a>
+            <a href="{{ route('about') }}" class="dock-item {{ request()->routeIs('about') ? 'active' : '' }}" title="Tentang Kami">
+                <div class="dock-icon-wrap">
+                    <i class="bi {{ request()->routeIs('about') ? 'bi-info-circle-fill' : 'bi-info-circle' }}"></i>
+                </div>
+            </a>
+            <a href="{{ route('contact') }}" class="dock-item {{ request()->routeIs('contact') ? 'active' : '' }}" title="Kontak">
+                <div class="dock-icon-wrap">
+                    <i class="bi {{ request()->routeIs('contact') ? 'bi-chat-dots-fill' : 'bi-chat-dots' }}"></i>
+                </div>
+            </a>
+        </div>
+    </nav>
 
     <!-- Footer -->
     <footer class="store-footer">

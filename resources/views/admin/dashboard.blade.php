@@ -11,9 +11,9 @@
 </div>
 
 <!-- 5 Clean Stat Cards -->
-<div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-xl-5 g-3 mb-4">
+<div class="row row-cols-2 row-cols-sm-2 row-cols-md-3 row-cols-xl-5 g-3 mb-4">
     <div class="col">
-        <div class="shadcn-card p-3 h-100 d-flex flex-column justify-content-between">
+        <div class="shadcn-card p-3 h-100 d-flex flex-column justify-content-between" style="min-height: 140px;">
             <div>
                 <div class="d-flex align-items-center justify-content-between mb-2">
                     <span class="text-muted small fw-semibold text-uppercase" style="font-size: 0.68rem; letter-spacing: 0.05em;">Total Judul Buku</span>
@@ -30,7 +30,7 @@
     </div>
 
     <div class="col">
-        <div class="shadcn-card p-3 h-100 d-flex flex-column justify-content-between">
+        <div class="shadcn-card p-3 h-100 d-flex flex-column justify-content-between" style="min-height: 140px;">
             <div>
                 <div class="d-flex align-items-center justify-content-between mb-2">
                     <span class="text-muted small fw-semibold text-uppercase" style="font-size: 0.68rem; letter-spacing: 0.05em;">Kategori Buku</span>
@@ -47,7 +47,7 @@
     </div>
 
     <div class="col">
-        <div class="shadcn-card p-3 h-100 d-flex flex-column justify-content-between">
+        <div class="shadcn-card p-3 h-100 d-flex flex-column justify-content-between" style="min-height: 140px;">
             <div>
                 <div class="d-flex align-items-center justify-content-between mb-2">
                     <span class="text-muted small fw-semibold text-uppercase" style="font-size: 0.68rem; letter-spacing: 0.05em;">Total Pesanan</span>
@@ -64,7 +64,7 @@
     </div>
 
     <div class="col">
-        <div class="shadcn-card p-3 h-100 d-flex flex-column justify-content-between">
+        <div class="shadcn-card p-3 h-100 d-flex flex-column justify-content-between" style="min-height: 140px;">
             <div>
                 <div class="d-flex align-items-center justify-content-between mb-2">
                     <span class="text-muted small fw-semibold text-uppercase" style="font-size: 0.68rem; letter-spacing: 0.05em;">Pelanggan</span>
@@ -80,8 +80,8 @@
         </div>
     </div>
 
-    <div class="col">
-        <div class="shadcn-card p-3 h-100 d-flex flex-column justify-content-between">
+    <div class="col-12 col-sm-6 col-md-4 col-xl">
+        <div class="shadcn-card p-3 h-100 d-flex flex-column justify-content-between" style="min-height: 140px;">
             <div>
                 <div class="d-flex align-items-center justify-content-between mb-2">
                     <span class="text-muted small fw-semibold text-uppercase" style="font-size: 0.68rem; letter-spacing: 0.05em;">Total Pendapatan</span>
@@ -89,7 +89,7 @@
                         <i class="bi bi-wallet2"></i>
                     </div>
                 </div>
-                <div class="font-serif-book fs-5 fw-bold text-dark">Rp {{ number_format($totalRevenue, 0, ',', '.') }}</div>
+                <div class="font-serif-book fs-4 fw-bold text-dark text-truncate" title="Rp {{ number_format($totalRevenue, 0, ',', '.') }}">Rp {{ number_format($totalRevenue, 0, ',', '.') }}</div>
             </div>
             <div class="text-muted small mt-2 pt-2 border-top" style="font-size: 0.72rem;">
                 Pesanan lunas & selesai

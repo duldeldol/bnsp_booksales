@@ -47,7 +47,14 @@
         box-shadow: 0 10px 24px rgba(180, 83, 9, 0.32);
     }
 
-    /* 3 ARCH NICHES DISPLAY */
+    /* HERO ARCH DISPLAY & SLIDER */
+    .hero-arch-carousel-container {
+        position: relative;
+        width: 100%;
+        max-width: 520px;
+        margin: 0 auto;
+    }
+
     .haven-arches-cluster {
         display: flex;
         align-items: flex-end;
@@ -70,7 +77,7 @@
         justify-content: center;
         padding: 1.25rem 0.5rem;
         cursor: pointer;
-        transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), background-color 0.2s ease;
+        transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), background-color 0.3s ease, box-shadow 0.3s ease;
         text-decoration: none;
     }
     .haven-arch-niche:hover {
@@ -91,7 +98,7 @@
         object-fit: cover;
         border-radius: 6px;
         box-shadow: 0 18px 30px -4px rgba(35, 30, 20, 0.25), 0 8px 12px -3px rgba(35, 30, 20, 0.12);
-        transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.3s ease;
+        transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.4s ease;
     }
     .haven-arch-niche.niche-side .haven-arch-book-img {
         width: 96px;
@@ -176,13 +183,94 @@
 
     @media (max-width: 991.98px) {
         .hero-headline { font-size: 2.6rem; }
-        .hero-haven-section { padding: 3.5rem 0; }
-        .haven-arches-cluster { margin-top: 2.5rem; gap: 1rem; }
-        .haven-arch-niche { max-width: 120px; }
-        .haven-arch-niche.niche-side { height: 195px; }
-        .haven-arch-niche.niche-center { height: 220px; }
-        .haven-arch-niche.niche-side .haven-arch-book-img { width: 78px; height: 116px; }
-        .haven-arch-niche.niche-center .haven-arch-book-img { width: 94px; height: 140px; }
+        .hero-haven-section { padding: 2rem 0 2.5rem 0; }
+
+        /* Mobile 3D Spotlight Arch Slider */
+        .hero-arch-carousel-container {
+            max-width: 380px;
+            margin: 0 auto;
+            overflow: visible;
+        }
+        .haven-arches-cluster {
+            position: relative;
+            height: 255px;
+            margin: 0 auto 1.5rem auto;
+            display: block;
+        }
+        .hero-arch-slide {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 168px;
+            max-width: 168px;
+            height: 245px;
+            padding: 1.15rem 0.6rem;
+            margin: 0;
+            border-top-left-radius: 999px;
+            border-top-right-radius: 999px;
+            border-bottom-left-radius: 14px;
+            border-bottom-right-radius: 14px;
+            transition: transform 0.6s cubic-bezier(0.22, 1, 0.36, 1),
+                        opacity 0.6s cubic-bezier(0.22, 1, 0.36, 1),
+                        box-shadow 0.45s ease,
+                        background-color 0.45s ease;
+            transform-origin: center center;
+            box-sizing: border-box;
+            user-select: none;
+            -webkit-user-select: none;
+        }
+
+        /* Slide Positions: Active (Center), Prev (Left peek), Next (Right peek) */
+        .hero-arch-slide.slide-center {
+            transform: translate(-50%, -50%) scale(1);
+            opacity: 1;
+            z-index: 5;
+            background-color: #e5decb;
+            box-shadow: 0 22px 38px -4px rgba(28, 25, 23, 0.3), 0 8px 16px rgba(0, 0, 0, 0.1);
+            pointer-events: auto;
+        }
+        .hero-arch-slide.slide-center .haven-arch-book-img {
+            width: 126px;
+            height: 188px;
+            box-shadow: 0 20px 32px -4px rgba(35, 30, 20, 0.38);
+        }
+
+        .hero-arch-slide.slide-prev {
+            transform: translate(-138%, -50%) scale(0.68);
+            opacity: 0.38;
+            z-index: 2;
+            background-color: #ede6d8;
+            pointer-events: auto;
+        }
+        .hero-arch-slide.slide-prev .haven-arch-book-img {
+            width: 110px;
+            height: 164px;
+        }
+
+        .hero-arch-slide.slide-next {
+            transform: translate(38%, -50%) scale(0.68);
+            opacity: 0.38;
+            z-index: 2;
+            background-color: #ede6d8;
+            pointer-events: auto;
+        }
+        .hero-arch-slide.slide-next .haven-arch-book-img {
+            width: 110px;
+            height: 164px;
+        }
+    }
+
+    @media (max-width: 575.98px) {
+        .hero-headline { font-size: 1.95rem; line-height: 1.2; margin-bottom: 0.65rem; }
+        .hero-description { font-size: 0.86rem; line-height: 1.55; margin-bottom: 1.15rem; }
+        .hero-haven-section { padding: 1.25rem 0 1.75rem 0; }
+        .haven-arches-cluster { height: 245px; margin-bottom: 1.25rem; }
+        .hero-arch-slide { width: 160px; max-width: 160px; height: 235px; }
+        .hero-arch-slide.slide-center .haven-arch-book-img { width: 120px; height: 178px; }
+        .hero-arch-slide.slide-prev { transform: translate(-136%, -50%) scale(0.66); opacity: 0.35; }
+        .hero-arch-slide.slide-next { transform: translate(36%, -50%) scale(0.66); opacity: 0.35; }
+        .haven-section-title { font-size: 1.35rem; }
+        .haven-section-head { margin-bottom: 1.15rem; }
     }
 </style>
 @endpush
@@ -192,8 +280,8 @@
 <!-- 1. HERO SECTION -->
 <section class="hero-haven-section">
     <div class="container">
-        <div class="row align-items-center g-5">
-            <div class="col-lg-6">
+        <div class="row align-items-center g-4 g-lg-5">
+            <div class="col-lg-6 order-2 order-lg-1">
                 <h1 class="hero-headline">
                     Temukan Bacaan<br>Terbaik Anda
                 </h1>
@@ -207,19 +295,19 @@
                 </div>
             </div>
 
-            <div class="col-lg-6">
-                <div class="haven-arches-cluster">
-                    @foreach($heroBooks as $index => $hBook)
-                        @php
-                            $isCenter = ($index === 1);
-                        @endphp
-                        <div class="haven-arch-niche {{ $isCenter ? 'niche-center' : 'niche-side' }}"
-                             data-bs-toggle="modal"
-                             data-bs-target="#modalBookDetail{{ $hBook->id }}"
-                             title="{{ $hBook->title }}">
-                            <img src="{{ $hBook->cover_url }}" alt="{{ $hBook->title }}" class="haven-arch-book-img" loading="eager">
-                        </div>
-                    @endforeach
+            <div class="col-lg-6 order-1 order-lg-2">
+                <div class="hero-arch-carousel-container" id="heroArchCarousel">
+                    <div class="haven-arches-cluster">
+                        @foreach($heroBooks as $index => $hBook)
+                            <div class="hero-arch-slide haven-arch-niche {{ $index === 1 ? 'slide-center niche-center' : ($index === 0 ? 'slide-prev niche-side' : 'slide-next niche-side') }}"
+                                 data-slide-index="{{ $index }}"
+                                 data-bs-toggle="modal"
+                                 data-bs-target="#modalBookDetail{{ $hBook->id }}"
+                                 title="{{ $hBook->title }}">
+                                <img src="{{ $hBook->cover_url }}" alt="{{ $hBook->title }}" class="haven-arch-book-img" loading="eager">
+                            </div>
+                        @endforeach
+                    </div>
                 </div>
             </div>
         </div>
@@ -261,7 +349,7 @@
                             <span class="boutique-price">
                                 {{ $rBook->formatted_price }}
                             </span>
-                            <div class="d-flex align-items-center" style="gap: 9px;">
+                            <div class="boutique-actions d-flex align-items-center" style="gap: 8px;">
                                 <button type="button" class="btn-boutique-action" data-bs-toggle="modal" data-bs-target="#modalBookDetail{{ $rBook->id }}">
                                     Detail
                                 </button>
@@ -291,7 +379,7 @@
             </a>
         </div>
 
-        <div class="row g-3 row-cols-2 row-cols-md-3 row-cols-lg-5">
+        <div class="row g-3 row-cols-2 row-cols-md-3 row-cols-lg-5 justify-content-center">
             @foreach($categories as $cat)
                 <div class="col d-flex">
                     <a href="{{ route('catalog', ['category' => $cat->id]) }}" class="haven-cat-pill-card w-100">
@@ -366,3 +454,120 @@
 @endforeach
 
 @endsection
+
+@push('scripts')
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    const container = document.getElementById('heroArchCarousel');
+    if (!container) return;
+
+    const slides = container.querySelectorAll('.hero-arch-slide');
+    const totalSlides = slides.length;
+    if (totalSlides < 2) return;
+
+    let currentHeroIndex = 1;
+    let autoSlideTimer = null;
+    const SLIDE_INTERVAL = 5000;
+
+    function updateCarousel(newIndex) {
+        currentHeroIndex = (newIndex + totalSlides) % totalSlides;
+        const prevIndex = (currentHeroIndex - 1 + totalSlides) % totalSlides;
+        const nextIndex = (currentHeroIndex + 1) % totalSlides;
+
+        slides.forEach(function (slide, idx) {
+            slide.classList.remove('slide-center', 'slide-prev', 'slide-next', 'niche-center', 'niche-side');
+            if (idx === currentHeroIndex) {
+                slide.classList.add('slide-center', 'niche-center');
+            } else if (idx === prevIndex) {
+                slide.classList.add('slide-prev', 'niche-side');
+            } else if (idx === nextIndex) {
+                slide.classList.add('slide-next', 'niche-side');
+            } else {
+                slide.classList.add('niche-side');
+            }
+        });
+    }
+
+    window.goToHeroSlide = function (index) {
+        updateCarousel(index);
+        restartTimer();
+    };
+
+    window.nextHeroSlide = function () {
+        updateCarousel(currentHeroIndex + 1);
+        restartTimer();
+    };
+
+    window.prevHeroSlide = function () {
+        updateCarousel(currentHeroIndex - 1);
+        restartTimer();
+    };
+
+    function startTimer() {
+        if (autoSlideTimer) clearInterval(autoSlideTimer);
+        autoSlideTimer = setInterval(function () {
+            if (window.innerWidth < 992) {
+                nextHeroSlide();
+            }
+        }, SLIDE_INTERVAL);
+    }
+
+    function stopTimer() {
+        if (autoSlideTimer) {
+            clearInterval(autoSlideTimer);
+            autoSlideTimer = null;
+        }
+    }
+
+    function restartTimer() {
+        stopTimer();
+        startTimer();
+    }
+
+    // Touch Swipe Support
+    let touchStartX = 0;
+    let touchEndX = 0;
+    let touchStartTime = 0;
+
+    container.addEventListener('touchstart', function (e) {
+        touchStartX = e.changedTouches[0].screenX;
+        touchStartTime = Date.now();
+        stopTimer();
+    }, { passive: true });
+
+    container.addEventListener('touchend', function (e) {
+        touchEndX = e.changedTouches[0].screenX;
+        const diffX = touchEndX - touchStartX;
+        const duration = Date.now() - touchStartTime;
+
+        if (Math.abs(diffX) > 35 && duration < 600) {
+            if (diffX < 0) {
+                nextHeroSlide();
+            } else {
+                prevHeroSlide();
+            }
+        }
+        startTimer();
+    }, { passive: true });
+
+    container.addEventListener('mouseenter', stopTimer);
+    container.addEventListener('mouseleave', startTimer);
+
+    slides.forEach(function (slide) {
+        slide.addEventListener('click', function (e) {
+            if (window.innerWidth < 992) {
+                const sIdx = parseInt(this.getAttribute('data-slide-index'));
+                if (sIdx !== currentHeroIndex) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    goToHeroSlide(sIdx);
+                }
+            }
+        }, true);
+    });
+
+    updateCarousel(currentHeroIndex);
+    startTimer();
+});
+</script>
+@endpush

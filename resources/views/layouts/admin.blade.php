@@ -283,9 +283,79 @@
             color: var(--color-gold);
         }
 
-        .form-control:focus, .form-select:focus {
+        /* Refined Form Controls & Select Dropdowns */
+        .form-control, .form-control-sm {
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            background-color: #ffffff;
+            color: var(--color-ink);
+            font-size: 0.85rem;
+            transition: all 0.15s ease;
+        }
+        .form-control:hover, .form-control-sm:hover {
+            border-color: #c7beab;
+        }
+
+        .form-select, .form-select-sm {
+            border: 1px solid var(--border-color) !important;
+            border-radius: 8px !important;
+            background-color: #ffffff !important;
+            color: var(--color-ink) !important;
+            font-size: 0.85rem !important;
+            font-weight: 500 !important;
+            padding: 0.45rem 2.2rem 0.45rem 0.85rem !important;
+            box-shadow: 0 1px 2px rgba(28, 25, 23, 0.03) !important;
+            background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3e%3cpath fill='none' stroke='%2378716c' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='m2 5 6 6 6-6'/%3e%3c/svg%3e") !important;
+            background-repeat: no-repeat !important;
+            background-position: right 0.75rem center !important;
+            background-size: 13px 9px !important;
+            transition: border-color 0.15s ease, box-shadow 0.15s ease !important;
+        }
+        .form-select:hover, .form-select-sm:hover {
+            border-color: #c7beab !important;
+        }
+        .form-control:focus, .form-select:focus, .form-select-sm:focus {
             border-color: var(--color-gold) !important;
             box-shadow: 0 0 0 3px rgba(180, 83, 9, 0.12) !important;
+            outline: none !important;
+        }
+
+        /* Admin Custom Styled Dropdowns */
+        .admin-custom-dropdown .dropdown-item {
+            color: var(--color-ink);
+            border-radius: 6px;
+            margin: 2px 4px;
+            width: calc(100% - 8px);
+            transition: background-color 0.15s ease, color 0.15s ease;
+        }
+        .admin-custom-dropdown .dropdown-item:hover {
+            background-color: #faf8f4;
+            color: var(--color-gold);
+        }
+        .admin-custom-dropdown .dropdown-item.active {
+            background-color: #fef3c7 !important;
+            color: var(--color-gold-hover) !important;
+            font-weight: 600 !important;
+        }
+        .admin-custom-dropdown .dropdown-item.active .bi-check2 {
+            color: var(--color-gold) !important;
+        }
+
+        /* Mobile Layout for Admin Filter Forms */
+        @media (max-width: 767.98px) {
+            .admin-filter-form {
+                gap: 0.65rem !important;
+            }
+            .admin-filter-form .col-md-6,
+            .admin-filter-form .col-md-3 {
+                width: 100% !important;
+            }
+            .form-select, .form-select-sm {
+                font-size: 0.84rem !important;
+                padding-top: 0.5rem !important;
+                padding-bottom: 0.5rem !important;
+                width: 100% !important;
+            }
         }
 
         /* Table styling */
@@ -508,11 +578,40 @@
         @media (max-width: 991.98px) {
             #sidebar {
                 position: fixed;
-                left: -260px;
-                transition: left 0.3s ease;
+                left: -270px;
+                top: 0;
+                bottom: 0;
+                width: 260px;
+                height: 100vh;
+                z-index: 1050;
+                transition: left 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+                box-shadow: 0 0 30px rgba(0, 0, 0, 0.18);
             }
             #sidebar.show {
                 left: 0;
+            }
+            .sidebar-backdrop {
+                position: fixed;
+                top: 0;
+                left: 0;
+                right: 0;
+                bottom: 0;
+                background-color: rgba(0, 0, 0, 0.45);
+                backdrop-filter: blur(2px);
+                z-index: 1040;
+                opacity: 0;
+                visibility: hidden;
+                transition: opacity 0.25s ease, visibility 0.25s ease;
+            }
+            .sidebar-backdrop.show {
+                opacity: 1;
+                visibility: visible;
+            }
+            .page-content {
+                padding: 1.25rem 1rem;
+            }
+            .top-navbar {
+                padding: 0.75rem 1rem;
             }
         }
     </style>
@@ -524,7 +623,7 @@
     <aside id="sidebar">
         <div>
             <!-- Brand -->
-            <div class="brand-header px-2 py-3">
+            <div class="brand-header px-2 py-3 d-flex align-items-center justify-content-between">
                 <a href="{{ route('admin.dashboard') }}" class="brand-logo-admin">
                     <div class="brand-logo-title">
                         BookStore<span class="brand-dot">.</span>
@@ -533,6 +632,9 @@
                         Admin Portal
                     </span>
                 </a>
+                <button type="button" class="btn btn-sm btn-light border d-lg-none" id="adminSidebarClose" aria-label="Tutup Menu" style="width: 32px; height: 32px; border-radius: 8px; display: flex; align-items: center; justify-content: center; padding: 0;">
+                    <i class="bi bi-x-lg"></i>
+                </button>
             </div>
 
             <!-- Navigation Sections -->
@@ -599,15 +701,21 @@
         </div>
     </aside>
 
+    <!-- Backdrop Overlay for Mobile Sidebar -->
+    <div class="sidebar-backdrop d-lg-none" id="sidebarBackdrop"></div>
+
     <!-- MAIN CONTAINER -->
     <div class="main-container">
         <!-- Top Navbar -->
         <header class="top-navbar">
             <div class="d-flex align-items-center gap-2">
+                <button type="button" class="btn btn-sm btn-light border d-lg-none d-flex align-items-center justify-content-center" id="adminSidebarToggle" aria-label="Buka Menu" style="width: 36px; height: 36px; border-radius: 8px; padding: 0;">
+                    <i class="bi bi-list fs-5 text-dark"></i>
+                </button>
                 <h5 class="font-serif-book fw-bold mb-0 text-dark">@yield('page-title', 'Dashboard')</h5>
             </div>
             <div class="d-flex align-items-center gap-2.5">
-                <span class="text-muted small ps-2.5 border-start" id="realtime-clock" style="font-size: 0.8rem; font-variant-numeric: tabular-nums; border-color: var(--border-color) !important;">
+                <span class="text-muted small ps-2.5 border-start d-none d-sm-inline" id="realtime-clock" style="font-size: 0.8rem; font-variant-numeric: tabular-nums; border-color: var(--border-color) !important;">
                     <span id="clock-display">{{ date('d M Y') }} | {{ date('H:i') }} WIB</span>
                 </span>
             </div>
@@ -724,6 +832,40 @@
 
     setInterval(updateRealtimeClock, 1000);
     updateRealtimeClock();
+
+    // Mobile Sidebar Drawer Toggle
+    const adminSidebar = document.getElementById('sidebar');
+    const adminSidebarToggle = document.getElementById('adminSidebarToggle');
+    const adminSidebarClose = document.getElementById('adminSidebarClose');
+    const adminSidebarBackdrop = document.getElementById('sidebarBackdrop');
+
+    function openAdminSidebar() {
+        if (adminSidebar) adminSidebar.classList.add('show');
+        if (adminSidebarBackdrop) adminSidebarBackdrop.classList.add('show');
+        document.body.style.overflow = 'hidden';
+    }
+
+    function closeAdminSidebar() {
+        if (adminSidebar) adminSidebar.classList.remove('show');
+        if (adminSidebarBackdrop) adminSidebarBackdrop.classList.remove('show');
+        document.body.style.overflow = '';
+    }
+
+    if (adminSidebarToggle) adminSidebarToggle.addEventListener('click', openAdminSidebar);
+    if (adminSidebarClose) adminSidebarClose.addEventListener('click', closeAdminSidebar);
+    if (adminSidebarBackdrop) adminSidebarBackdrop.addEventListener('click', closeAdminSidebar);
+
+    // Global Admin Custom Dropdown Helper
+    function submitAdminFilter(btn, value) {
+        const dropdown = btn.closest('.admin-custom-dropdown');
+        if (!dropdown) return;
+        const input = dropdown.querySelector('input[type="hidden"]');
+        const form = dropdown.closest('form');
+        if (input && form) {
+            input.value = value;
+            form.submit();
+        }
+    }
 </script>
 @stack('scripts')
 </body>

@@ -14,7 +14,7 @@
 <!-- Search & Status Filter Card -->
 <div class="shadcn-card mb-4">
     <div class="p-3">
-        <form action="{{ route('admin.orders.index') }}" method="GET" class="row g-2 align-items-center">
+        <form action="{{ route('admin.orders.index') }}" method="GET" class="row g-2 align-items-center admin-filter-form">
             <div class="col-md-6">
                 <div class="input-group input-group-sm">
                     <span class="input-group-text bg-white border-end-0 text-muted"><i class="bi bi-search"></i></span>
@@ -22,13 +22,41 @@
                 </div>
             </div>
             <div class="col-md-3">
-                <select name="status" class="form-select form-select-sm" onchange="this.form.submit()">
-                    <option value="">Semua Status Pesanan</option>
-                    <option value="pending" {{ request('status') == 'pending' ? 'selected' : '' }}>Menunggu Pembayaran</option>
-                    <option value="paid" {{ request('status') == 'paid' ? 'selected' : '' }}>Lunas / Diproses</option>
-                    <option value="completed" {{ request('status') == 'completed' ? 'selected' : '' }}>Selesai</option>
-                    <option value="cancelled" {{ request('status') == 'cancelled' ? 'selected' : '' }}>Dibatalkan</option>
-                </select>
+                <div class="dropdown admin-custom-dropdown w-100">
+                    @php
+                        $statusOptions = [
+                            'pending' => 'Menunggu Pembayaran',
+                            'paid' => 'Lunas / Diproses',
+                            'completed' => 'Selesai',
+                            'cancelled' => 'Dibatalkan',
+                        ];
+                        $selectedLabel = $statusOptions[request('status')] ?? 'Semua Status Pesanan';
+                    @endphp
+                    <button class="btn btn-sm form-select form-select-sm text-start d-flex align-items-center justify-content-between w-100" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        <span class="text-truncate">{{ $selectedLabel }}</span>
+                    </button>
+                    <ul class="dropdown-menu w-100 shadow-sm border mt-1" style="border-radius: 10px; border-color: var(--border-color) !important;">
+                        <li>
+                            <button type="button" class="dropdown-item small py-2 d-flex align-items-center justify-content-between {{ !request('status') ? 'active' : '' }}" onclick="submitAdminFilter(this, '')">
+                                <span>Semua Status Pesanan</span>
+                                @if(!request('status'))
+                                    <i class="bi bi-check2"></i>
+                                @endif
+                            </button>
+                        </li>
+                        @foreach($statusOptions as $val => $lbl)
+                            <li>
+                                <button type="button" class="dropdown-item small py-2 d-flex align-items-center justify-content-between {{ request('status') == $val ? 'active' : '' }}" onclick="submitAdminFilter(this, '{{ $val }}')">
+                                    <span class="text-truncate">{{ $lbl }}</span>
+                                    @if(request('status') == $val)
+                                        <i class="bi bi-check2"></i>
+                                    @endif
+                                </button>
+                            </li>
+                        @endforeach
+                    </ul>
+                    <input type="hidden" name="status" value="{{ request('status') }}">
+                </div>
             </div>
             <div class="col-md-3 d-flex gap-2">
                 <button type="submit" class="btn btn-shadcn-primary btn-sm w-100 d-inline-flex align-items-center justify-content-center">Cari

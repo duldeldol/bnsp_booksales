@@ -2,6 +2,17 @@
 
 @section('title', 'Checkout Pemesanan - BookStore')
 
+@push('styles')
+<style>
+    @media (max-width: 991.98px) {
+        .checkout-summary-card {
+            position: static !important;
+            top: auto !important;
+        }
+    }
+</style>
+@endpush
+
 @section('content')
 <div class="py-5" style="background-color: var(--bg-cream); min-height: 80vh;">
     <div class="container">
@@ -126,7 +137,7 @@
 
                 <!-- Right Column: Order Summary & Confirmation CTA -->
                 <div class="col-lg-5 col-xl-4">
-                    <div class="bg-white rounded-3 border p-4 shadow-sm sticky-top" style="border-color: var(--border-subtle) !important; top: 90px; z-index: 10;">
+                    <div class="bg-white rounded-3 border p-4 shadow-sm sticky-top checkout-summary-card" style="border-color: var(--border-subtle) !important; top: 90px; z-index: 10;">
                         <h5 class="font-serif-book fw-bold text-dark mb-3">Rincian Belanja</h5>
 
                         <!-- Items List -->
